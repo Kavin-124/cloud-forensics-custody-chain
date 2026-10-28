@@ -1,124 +1,230 @@
 # Cryptographic Chain of Custody System for Digital Forensics in Cloud Environments
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit](https://img.shields.io/badge/frontend-Streamlit%201.35+-FF4B4B.svg)](https://streamlit.io/)
-[![Compliance](https://img.shields.io/badge/compliance-BSA%202023%20§63%20|%20IEA%20§65B-059669.svg)](#statutory-compliance)
-[![License](https://img.shields.io/badge/license-MIT-slate.svg)](LICENSE)
+<div align="center">
 
-An enterprise-grade, tamper-evident cryptographic digital forensics evidence ledger and chain of custody management platform. Built to satisfy statutory admissibility requirements under **Section 63 of the Bharatiya Sakshya Adhiniyam (BSA) 2023** and **Section 65B of the Indian Evidence Act (IEA)**.
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.35%2B-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Cryptography](https://img.shields.io/badge/Cryptography-SHA--256%20%7C%20HMAC-0B0F19?style=for-the-badge&logo=codereview&logoColor=38BDF8)](https://en.wikipedia.org/wiki/SHA-2)
+[![Statutory Admissibility](https://img.shields.io/badge/Statutory%20Compliance-BSA%202023%20%C2%A763%20%7C%20IEA%20%C2%A765B-059669?style=for-the-badge)](https://en.wikipedia.org/wiki/Indian_Evidence_Act)
+[![License](https://img.shields.io/badge/License-MIT-slate?style=for-the-badge)](LICENSE)
 
----
+**An enterprise sovereign digital forensic evidence vault and cryptographic chain of custody ledger.**  
+Designed to guarantee bitstream integrity, prevent post-seizure tampering, and automate statutory certificate generation under **Section 63 of the Bharatiya Sakshya Adhiniyam (BSA) 2023** and **Section 65B of the Indian Evidence Act (IEA)**.
 
-## 🏛️ System Architecture & Four-Tier Access Portals
-
-The vault provides four isolated, role-segregated institutional terminals:
-
-| Role / Portal | Jurisdiction / Function | Statutory Mandate |
-| :--- | :--- | :--- |
-| **Law Enforcement** (`police`) | Evidence Seizure, Bitstream Imaging (SHA-256), Geolocation Sealing, Custody Transfer Handover Challans | CrPC §102 / BNSS §105 Evidence Seizure |
-| **Counsel & Bar** (`lawyer`) | Exhibit Discovery, Reverse Hash Verification, Evidentiary Objections, Section 65B Certificates | BSA 2023 §63 / IEA §65B Admissibility |
-| **Judicial Bench** (`judge`) | Cryptographic Integrity Verification, Tamper-Evident Matrix, Judicial Admissibility Determinations | Final Bench Order & Court Seal |
-| **Root Authority** (`admin`) | Cryptographic Identity Provisioning, Merkle Root Verification, Forensic Auto-Healing Engine | Custody Ledger Governance |
+</div>
 
 ---
 
-## 🔐 Key Technical Features
+## 📸 System Architecture Overview
 
-1. **Cryptographic Bitstream Hashing:**
-   - Dual SHA-256 computation over binary bitstreams.
-   - HMAC-SHA256 digital signature sealing for all custody transfer transactions.
-   - Incremental Merkle root recalculation preventing post-seizure ledger mutation.
-
-2. **Self-Healing Forensic Ledger:**
-   - Real-time tamper detection identifying bitstream corruption or metadata manipulation.
-   - Cryptographic state snapshotting for disaster recovery and automated ledger self-healing.
-
-3. **Statutory 65B Certificate Generation:**
-   - Automated generation of court-admissible forensic audit certificates (`.pdf`) compliant with Indian Evidence Act Section 65B(4) and BSA 2023 Section 63.
-   - Cryptographic QR codes embedded for offline judicial verification.
-
-4. **Forensic Geolocation & Crime Scene Mapping:**
-   - Seizure GPS coordinates validation and visualization.
-   - Interactive evidence route telemetry mapping from seizure to forensic lab.
+<div align="center">
+  <img src="architecture_diagram.png" alt="Cryptographic Chain of Custody System Architecture" width="100%" style="border-radius: 10px; border: 1px solid #1E293B; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
+  <p><em>Figure 1: End-to-End Cryptographic Evidence Ingestion, Merkle Sealing, and Multi-Portal Judicial Audit Architecture.</em></p>
+</div>
 
 ---
 
-## 🚀 Quick Start Guide
+## 🔄 Cryptographic Custody & Evidentiary Lifecycle
 
-### 1. Prerequisites
-- Python 3.10 or higher
-- Git
+```mermaid
+flowchart LR
+    subgraph S1["1. Crime Scene Seizure"]
+        A["Digital Evidence Seizure\n(Storage / CCTV / Logs)"] --> B["GPS Geotagging &\nDevice Metadata Logging"]
+        B --> C["Dual SHA-256 Bitstream Imaging"]
+    end
 
-### 2. Clone Repository & Install Dependencies
+    subgraph S2["2. Cryptographic Sealing"]
+        C --> D["Block Mining &\nHMAC-SHA256 Signing"]
+        D --> E["Merkle Tree Root\nRecalculation"]
+        E --> F["QR Custody Seal\nGeneration"]
+    end
+
+    subgraph S3["3. Custody Handover"]
+        F --> G["Physical Transfer\n(Police to Lab / Court)"]
+        G --> H["Handover Challan PDF\nGenerated with QR"]
+    end
+
+    subgraph S4["4. Judicial Admissibility"]
+        H --> I["Lawyer Discovery &\nReverse Hash Lookup"]
+        I --> J["Judge Forensic Audit &\nTamper-Proof Seal"]
+        J --> K["Statutory §65B Certificate\nAdmitted into Evidence"]
+    end
+
+    classDef stage1 fill:#EFF6FF,stroke:#3B82F6,stroke-width:2px,color:#1E3A8A;
+    classDef stage2 fill:#F0FDF4,stroke:#10B981,stroke-width:2px,color:#065F46;
+    classDef stage3 fill:#FFFBEB,stroke:#F59E0B,stroke-width:2px,color:#92400E;
+    classDef stage4 fill:#FAF5FF,stroke:#8B5CF6,stroke-width:2px,color:#5B21B6;
+
+    class A,B,C stage1;
+    class D,E,F stage2;
+    class G,H stage3;
+    class I,J,K stage4;
+```
+
+---
+
+## 🏛️ Multi-Portal Institutional Role Matrix
+
+The platform implements strict Role-Based Access Control (RBAC), segregating evidence handlers into four isolated terminals:
+
+```mermaid
+graph TD
+    Gateway["National Forensic Evidence Vault // Merkle Engine\n(HMAC-SHA256 Multi-Role Authentication)"]
+
+    Gateway -->|Jurisdiction: Law Enforcement| P1["Police Evidence Intake Terminal"]
+    Gateway -->|Jurisdiction: Bar & Defense| P2["Lawyer Discovery & Examination Terminal"]
+    Gateway -->|Jurisdiction: Judicial Bench| P3["Judge Judicial Command Bench"]
+    Gateway -->|Jurisdiction: Forensic Authority| P4["Forensic Identity & Ledger Governance"]
+
+    P1 --> F1["• Bitstream Seizure & Hashing\n• Custody Handover Challan\n• Crime Scene GPS Mapping"]
+    P2 --> F2["• Exhibit Discovery\n• Reverse Hash Verification\n• Section 65B Certificates"]
+    P3 --> F3["• Cryptographic Integrity Audit\n• Tamper-Detection Matrix\n• Court Seal Determinations"]
+    P4 --> F4["• Identity Provisioning\n• Self-Healing Engine\n• Merkle Disaster Recovery"]
+
+    style Gateway fill:#0B0F19,stroke:#38BDF8,stroke-width:2px,color:#FFFFFF
+    style P1 fill:#EFF6FF,stroke:#1D4ED8,stroke-width:2px,color:#1E3A8A
+    style P2 fill:#EEF2FF,stroke:#4338CA,stroke-width:2px,color:#312E81
+    style P3 fill:#FEF2F2,stroke:#991B1B,stroke-width:2px,color:#7F1D1D
+    style P4 fill:#F0FDF4,stroke:#166534,stroke-width:2px,color:#14532D
+```
+
+| Portal Terminal | Primary Actor | Statutory Role & Judicial Mandate | Key Features |
+| :--- | :--- | :--- | :--- |
+| **Law Enforcement Terminal** | Investigating Officer (Cyber Crime) | **CrPC §102 / BNSS §105** — Lawful evidence seizure, physical chain documentation, and integrity protection. | Bitstream SHA-256 imaging, custody handover logging, Google Maps GPS route tracking, QR tag stamping. |
+| **Evidentiary Discovery Terminal** | Public Prosecutor / Defense Counsel | **BSA 2023 §63 / IEA §65B** — Evidentiary discovery, independent hash verification, and formal objections. | Exhibit discovery dossier, reverse SHA-256 verification, automated Section 65B PDF certificate generation. |
+| **Judicial Command Bench** | Presiding Magistrate / Bench | **Final Bench Determinations** — Mathematical verification of tamper-free chain before marking exhibits as admitted. | One-click ledger audit, tamper matrix visualization, judicial seal application, scannable QR verification. |
+| **Ledger Governance Center** | Chief Forensic Registrar | **ISO/IEC 27037:2012** — Ledger maintenance, cryptographic identity issuance, and resilience governance. | HMAC key rotation, Merkle tree root recalculation, tamper simulation & automated self-healing. |
+
+---
+
+## 🔒 Forensic Block Cryptographic Structure
+
+Every seized artifact is packaged into a tamper-evident cryptographic block with the following data schema:
+
+```json
+{
+  "block_id": 1,
+  "timestamp": "2024-10-28T14:32:10.849201",
+  "case_id": "FIR-2024-CYBER-809",
+  "officer_name": "Insp. R. Vikram",
+  "badge_number": "CB-TN-4091",
+  "evidence_type": "Digital Storage (Disk Image)",
+  "evidence_name": "seized_nvme_drive.dd",
+  "file_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "seizure_location": "Anna Nagar Cyber Hub, Chennai",
+  "latitude": 13.0827,
+  "longitude": 80.2707,
+  "custody_chain": [
+    {
+      "step": 1,
+      "event": "Evidence Seizure at Scene",
+      "custodian": "Insp. R. Vikram",
+      "timestamp": "2024-10-28T14:32:10",
+      "status": "SECURED_BITSTREAM"
+    }
+  ],
+  "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "merkle_root": "a4f89d3119c824e8894101e149afbf4c8996fb92427ae41e4649b934ca495991",
+  "hmac_signature": "7d91cb6a0401c82a657f20194435793a69e420b486c27e8894101e149afbf4c8"
+}
+```
+
+---
+
+## 📜 Statutory Court Certificate & Scannable QR Tag
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <img src="samples/qr_tag_block_1.png" width="220px" alt="Forensic QR Verification Tag" /><br/>
+        <b>Offline Scannable Cryptographic Evidence Tag</b><br/>
+        <em>Contains Case FIR, SHA-256 Bitstream Hash & HMAC Signature</em>
+      </td>
+      <td align="center" width="50%">
+        <img src="samples/official_scannable_test.png" width="220px" alt="Challan Transfer QR" /><br/>
+        <b>Custody Handover Challan QR</b><br/>
+        <em>Verifiable by Mobile Scanner or Judicial Bench</em>
+      </td>
+    </tr>
+  </table>
+</div>
+
+---
+
+## 🛠️ Technology Stack & Engineering Design
+
+```
+Frontend Architecture       : Streamlit 1.35+ (Dual st.html + st.markdown CSS Engine)
+Typography & Styling        : TBJ Cota Sans (Modern Grotesk UI) + JetBrains Mono (Cryptographic Data)
+Cryptographic Hash Engine   : Dual-pass SHA-256 (FIPS 180-4 compliant) + HMAC-SHA256 Digital Signing
+Ledger Data Structure       : Linked SHA-256 Merkle Custody Blockchain (Zero-Knowledge Verified)
+Audit & Certificate Engine  : FPDF2 Binary Engine (Section 65B PDF Generation)
+Mapping & Geolocation       : Integrated Crime Scene GPS Mapping Engine
+Language / Runtime          : Python 3.10+ on Windows / Linux / macOS
+```
+
+---
+
+## 🚀 Installation & Setup
+
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/<your-username>/cloud-forensics-custody.git
-cd cloud-forensics-custody
+git clone https://github.com/Kavin-124/cloud-forensics-custody-chain.git
+cd cloud-forensics-custody-chain
+```
 
-# Create and activate virtual environment (recommended)
+### 2. Configure Virtual Environment (Recommended)
+```bash
+# Windows (PowerShell)
 python -m venv venv
-# On Windows:
-venv\Scripts\activate
-# On Linux/macOS:
-source venv/bin/activate
+.\venv\Scripts\Activate.ps1
 
-# Install required packages
+# Linux / macOS
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+```bash
 pip install -r requirements.txt
 ```
 
-### 3. Launch Platform
+### 4. Launch the Platform
 ```bash
 python -m streamlit run app.py
 ```
-Open your browser at `http://localhost:8501`.
+*Open your browser and navigate to `http://localhost:8501`.*
 
 ---
 
-## 📋 Evaluation Sandbox (Pre-Configured Accounts)
+## 🧪 Institutional Sandbox (Evaluation Mode)
 
-For academic evaluations and demonstrations, use the built-in **Institutional Sandbox** or manual credentials:
-
-| Division | Identifier | Passphrase | Assigned Personnel |
-| :--- | :--- | :--- | :--- |
-| **Law Enforcement** | `CB-TN-4091` | `police123` | Insp. R. Vikram (Cyber Crime Wing) |
-| **Legal Counsel** | `advocate_kavin` | `lawyer123` | Adv. Kavin R. (High Court Bar) |
-| **Judicial Bench** | `justice_sharma` | `judge123` | Hon. Justice S. Sharma (Sessions Bench) |
-| **Root Admin** | `admin` | `admin123` | Chief Forensic Registrar (Cloud Node) |
-
----
-
-## 📁 Repository Structure
+Pre-provisioned evaluation accounts for instant testing without manual entry:
 
 ```
-├── app.py                     # Main application entry point & role router
-├── crypto_chain.py            # Core cryptographic blockchain & Merkle custody ledger
-├── pdf_generator.py           # Forensic Section 65B & Handover challan PDF engine
-├── requirements.txt           # Python library dependencies
-├── backend/
-│   ├── auth_service.py        # RBAC identity authentication & session management
-│   └── audit_service.py       # Tamper detection telemetry & system audit logger
-├── ui/
-│   ├── theme.py               # Enterprise sovereign design system & typography
-│   ├── login_page.py          # Institutional authentication gateway
-│   ├── police_portal.py       # Evidence intake & chain of custody handover terminal
-│   ├── lawyer_portal.py       # Evidentiary discovery, reverse hash search & 65B terminal
-│   ├── judge_portal.py        # Judicial determinations & cryptographic audit bench
-│   └── admin_portal.py        # Ledger governance, auto-healing & identity provisioning
-├── static/
-│   └── fonts/                 # Clean font binaries served via static server
-└── .streamlit/
-    └── config.toml            # Server settings & static file hosting configuration
+┌─────────────────────────┬───────────────────┬──────────────┬──────────────────────────────────────────┐
+│ Jurisdictional Division │ Login Identifier  │ Passphrase   │ Assigned Institutional Personnel         │
+├─────────────────────────┼───────────────────┼──────────────┼──────────────────────────────────────────┤
+│ Law Enforcement         │ CB-TN-4091        │ police123    │ Insp. R. Vikram (Cyber Crime Wing)       │
+│ Legal Counsel & Bar     │ advocate_kavin    │ lawyer123    │ Adv. Kavin R. (High Court Bar)           │
+│ Judicial Bench          │ justice_sharma    │ judge123     │ Hon. Justice S. Sharma (Sessions Bench)  │
+│ Root Authority          │ admin             │ admin123     │ Chief Forensic Registrar (Cloud Node-01) │
+└─────────────────────────┴───────────────────┴──────────────┴──────────────────────────────────────────┘
 ```
 
 ---
 
-## ⚖️ Statutory Compliance
+## ⚖️ Legal & Statutory Framework
 
-- **Bharatiya Sakshya Adhiniyam (BSA) 2023, Section 63** — Conditions for admissibility of electronic records.
-- **Indian Evidence Act (IEA) 1872, Section 65B** — Special provisions as to evidence relating to electronic record.
-- **ISO/IEC 27037:2012** — Guidelines for identification, collection, acquisition, and preservation of digital evidence.
+- **Bharatiya Sakshya Adhiniyam (BSA) 2023, Section 63:** Admissibility of electronic records and requirements of non-tampering certificate.
+- **Indian Evidence Act (IEA) 1872, Section 65B(4):** Mandatory certification by person occupying official position responsible for operation of electronic device.
+- **ISO/IEC 27037:2012:** Guidelines for identification, collection, acquisition, and preservation of digital evidence.
+- **NIST SP 800-86:** Guide to Integrating Forensic Techniques into Incident Response.
 
 ---
 
-## 👨‍💻 Author & Academic Project
-- Developed as a specialized **Digital Cloud Forensics & Cryptographic Custody Ledger System**.
-- Affiliation: Department of Information Technology, V.S.B. Engineering College.
+## 👨‍💻 Project Authors & Academic Credits
+- **Project Title:** Cryptographic Chain of Custody System for Digital Forensics in Cloud Environments
+- **Lead Developer:** Kavin R. ([@Kavin-124](https://github.com/Kavin-124))
+- **Institution:** Department of Information Technology, V.S.B. Engineering College
