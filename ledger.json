@@ -1,0 +1,119 @@
+[
+    {
+        "block_id": 1,
+        "timestamp": "2026-09-23 05:49:21 UTC",
+        "case_id": "FIR-2024-CYBER-809",
+        "officer_name": "Inspector R. Vikram",
+        "badge_id": "CB-TN-4091",
+        "seizure_location": "Data Center Room B, Chennai",
+        "original_filename": "1116892776369620649.jpg",
+        "stored_filename": "1_1116892776369620649.jpg",
+        "file_size_bytes": 249115,
+        "evidence_hash": "f793c5fd34c08961faceea698f8f9cd816dcb13132d2886912451d1323eb2706",
+        "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "hmac_sig": "c95d92108d8465ce2fe73cd189c8e7abfe844426110d06b8186cc9c31067b0d9",
+        "block_hash": "c55ae3a25ae01fc7621e8a0e766144d6e363c2c92b288a1edc9df5f443611fb4",
+        "custody_trail": [
+            {
+                "timestamp": "2026-10-19 13:55:00 UTC",
+                "from_entity": "Encrypted Cloud Mirror (Disaster Recovery Engine)",
+                "to_entity": "Local Evidence Vault (Self-Healed)",
+                "purpose": "Self-Healing Protocol: Restored pristine file binary from Cloud Mirror after cryptographic tamper alert",
+                "custody_status": "Integrity 100% Restored",
+                "transfer_hmac": "b7851ad665791b22f3ec091117f36e627fd3c7ffc23e659cb0176da942ad689d"
+            },
+            {
+                "timestamp": "2026-10-27 16:40:27 UTC",
+                "from_entity": "Encrypted Cloud Mirror (Disaster Recovery Engine)",
+                "to_entity": "Local Evidence Vault (Self-Healed)",
+                "purpose": "Self-Healing Protocol: Restored pristine file binary from Cloud Mirror after cryptographic tamper alert",
+                "custody_status": "Integrity 100% Restored",
+                "transfer_hmac": "1cc389b552909f31d15e8b2fb156453794083abaa89a79e0d35832768fa8374f"
+            },
+            {
+                "timestamp": "2026-10-27 16:46:54 UTC",
+                "from_entity": "Encrypted Cloud Mirror (Disaster Recovery Engine)",
+                "to_entity": "Local Evidence Vault (Self-Healed)",
+                "purpose": "Self-Healing Protocol: Restored pristine file binary from Cloud Mirror after cryptographic tamper alert",
+                "custody_status": "Integrity 100% Restored",
+                "transfer_hmac": "54aea6efd6f0e312db01d350c610208982973bbb5b8dbfbeda7ac0d57ffa9398"
+            }
+        ],
+        "magic_inspection": {
+            "true_type": "JPEG Image (JFIF / EXIF)",
+            "true_mime": "image/jpeg",
+            "magic_hex": "FF D8 FF E0 00 10 4A 46",
+            "declared_extension": "jpg",
+            "is_spoofed": false,
+            "severity": "CLEAN",
+            "verdict": "VERIFIED: True binary header strictly matches claimed '.jpg' (JPEG Image (JFIF / EXIF))",
+            "hex_dump": "00000000:  FF D8 FF E0 00 10 4A 46 49 46 00 01 01 01 00 48  |......JFIF.....H|\n00000010:  00 48 00 00 FF DB 00 43 00 03 02 02 03 02 02 03  |.H.....C........|\n00000020:  03 03 03 04 03 03 04 05 08 05 05 04 04 05 0A 07  |................|\n00000030:  07 06 08 0C 0A 0C 0C 0B 0A 0B 0B 0D 0E 12 10 0D  |................|"
+        },
+        "latitude": 13.07495,
+        "longitude": 80.26295
+    },
+    {
+        "block_id": 2,
+        "timestamp": "2026-09-23 06:05:17 UTC",
+        "case_id": "FIR-2024-CYBER-809",
+        "officer_name": "Inspector S. Kabilan",
+        "badge_id": "CB-TN-4091",
+        "seizure_location": "Data Center Room A, Chennai",
+        "original_filename": "2744449769766385.jpg",
+        "stored_filename": "2_2744449769766385.jpg",
+        "file_size_bytes": 170086,
+        "evidence_hash": "e725d9d28b67d5f39460ceac489d081e71a28e170f2cbf4312f2bbea2e073a6f",
+        "prev_hash": "c55ae3a25ae01fc7621e8a0e766144d6e363c2c92b288a1edc9df5f443611fb4",
+        "hmac_sig": "a6d982bece399e82d76ae12b5c6a17c6d995b50ed4f028165bd5fce947920cb3",
+        "block_hash": "bdf47e38f1ae56c3ea4b4effd18d43c2eeaa5cd144ae0223b79925576f1f4120",
+        "custody_trail": [
+            {
+                "timestamp": "2026-10-19 13:55:01 UTC",
+                "from_entity": "Encrypted Cloud Mirror (Disaster Recovery Engine)",
+                "to_entity": "Local Evidence Vault (Self-Healed)",
+                "purpose": "Self-Healing Protocol: Restored pristine file binary from Cloud Mirror after cryptographic tamper alert",
+                "custody_status": "Integrity 100% Restored",
+                "transfer_hmac": "41721a18689bff3e262368780d8a12f89e446a9ee1a28677e879eb9567b938f1"
+            }
+        ],
+        "magic_inspection": {
+            "true_type": "JPEG Image (JFIF / EXIF)",
+            "true_mime": "image/jpeg",
+            "magic_hex": "FF D8 FF E0 00 10 4A 46",
+            "declared_extension": "jpg",
+            "is_spoofed": false,
+            "severity": "CLEAN",
+            "verdict": "VERIFIED: True binary header strictly matches claimed '.jpg' (JPEG Image (JFIF / EXIF))",
+            "hex_dump": "00000000:  FF D8 FF E0 00 10 4A 46 49 46 00 01 01 01 00 48  |......JFIF.....H|\n00000010:  00 48 00 00 FF E1 03 3C 45 78 69 66 00 00 4D 4D  |.H.....<Exif..MM|\n00000020:  00 2A 00 00 00 08 00 06 01 0E 00 02 00 00 00 0B  |.*..............|\n00000030:  00 00 01 62 87 69 00 04 00 00 00 01 00 00 01 6E  |...b.i.........n|"
+        },
+        "latitude": 13.0912,
+        "longitude": 80.2792
+    },
+    {
+        "block_id": 3,
+        "timestamp": "2026-09-23 06:25:01 UTC",
+        "case_id": "FIR-2024-CYBER-809",
+        "officer_name": "Inspector A.T. Keshav",
+        "badge_id": "CB-TN-5083",
+        "seizure_location": "Data Center Room B, Kangayem",
+        "original_filename": "lv_0_20260806201432.mp4",
+        "stored_filename": "3_lv_0_20260806201432.mp4",
+        "file_size_bytes": 61544883,
+        "evidence_hash": "376f5f1bb0f36fa30d3f87126404ddc6f14b13c4c8b995ae45d076288850c8c1",
+        "prev_hash": "bdf47e38f1ae56c3ea4b4effd18d43c2eeaa5cd144ae0223b79925576f1f4120",
+        "hmac_sig": "e26fd1d2a8edef930fb2f446fbdf1de0d96f23171e62ca008abb62e8aa6d7070",
+        "block_hash": "0148f7ef7b0b27c10b4200784d26e9710020d005ec4c84af51cbe01da1d4287d",
+        "magic_inspection": {
+            "true_type": "ISO MPEG-4 Container (isom)",
+            "true_mime": "video/mp4",
+            "magic_hex": "00 00 00 20 66 74 79 70",
+            "declared_extension": "mp4",
+            "is_spoofed": false,
+            "severity": "CLEAN",
+            "verdict": "VERIFIED: True binary header strictly matches claimed '.mp4' (ISO MPEG-4 Container (isom))",
+            "hex_dump": "00000000:  00 00 00 20 66 74 79 70 69 73 6F 6D 00 00 02 00  |... ftypisom....|\n00000010:  69 73 6F 6D 69 73 6F 32 61 76 63 31 6D 70 34 31  |isomiso2avc1mp41|\n00000020:  00 00 00 08 66 72 65 65 03 AA 1F 75 6D 64 61 74  |....free...umdat|\n00000030:  21 11 45 00 14 50 01 47 21 21 45 00 14 50 01 47  |!.E..P.G!!E..P.G|"
+        },
+        "latitude": 11.00475,
+        "longitude": 77.56175
+    }
+]

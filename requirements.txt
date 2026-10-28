@@ -1,0 +1,6 @@
+streamlit>=1.28.0
+fpdf2>=2.7.5
+qrcode>=7.4.2
+pillow>=10.0.0
+pandas>=2.0.0
+fonttools>=4.40.0

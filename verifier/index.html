@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Forensic Chain of Custody - Verification Portal</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --border-color: #1f2937;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --success: #10b981;
+            --danger: #ef4444;
+            --primary: #3b82f6;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 15px;
+        }
+        .container {
+            width: 100%;
+            max-width: 520px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .emblem {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+        .org-title {
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .portal-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 4px;
+            color: #ffffff;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            margin-bottom: 16px;
+        }
+        .status-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        .status-authentic {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+        .status-tampered {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .field-group {
+            margin-bottom: 14px;
+        }
+        .field-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.8px;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .field-value {
+            font-size: 14px;
+            color: #ffffff;
+            font-weight: 500;
+            word-break: break-all;
+        }
+        .code-box {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 12px;
+            color: #58a6ff;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+        .legal-notice {
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 12px;
+            color: #93c5fd;
+            line-height: 1.45;
+            margin-top: 15px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="emblem">🛡️</div>
+            <div class="org-title">Department of Information Technology</div>
+            <div class="portal-title">Forensic Evidence Verification</div>
+        </div>
+
+        <div class="card">
+            <div id="statusBadge" class="status-badge status-authentic">
+                <span>🟢</span>
+                <span id="statusText">VERIFIED AUTHENTIC (100%)</span>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Official FIR / Case Reference</div>
+                <div id="caseRef" class="field-value" style="font-size: 17px; font-weight: 700; color: #38bdf8;">Loading...</div>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-bottom: 14px;">
+                <div style="flex: 1;">
+                    <div class="field-label">Block ID</div>
+                    <div id="blockId" class="field-value">#1</div>
+                </div>
+                <div style="flex: 1;">
+                    <div class="field-label">Crime Classification</div>
+                    <div id="caseType" class="field-value">Cyber Forensics</div>
+                </div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Seized Evidence File</div>
+                <div id="filename" class="field-value" style="font-weight: 600;">Loading...</div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Cryptographic SHA-256 Fingerprint</div>
+                <div id="evidenceHash" class="code-box">Computing...</div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Custody Ingestion Timestamp</div>
+                <div id="timestamp" class="field-value">Loading...</div>
+            </div>
+
+            <div class="field-group">
+                <div class="field-label">Seizing Investigating Officer</div>
+                <div id="officer" class="field-value">Loading...</div>
+            </div>
+
+            <div id="legalBox" class="legal-notice">
+                ⚖️ <strong>Legal Admissibility:</strong> Certified under Section 65B of the Indian Evidence Act. The cryptographic hash chain confirms this electronic evidence remains untouched and authentic.
+            </div>
+        </div>
+
+        <div class="footer">
+            Cryptographic Chain of Custody System for Cloud Forensics<br>
+            V.S.B. Engineering College, Karur | Cyber Defense Division
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        
+        const caseId = params.get('case') || 'FIR-2024-CYBER-809';
+        const blockId = params.get('block') || '1';
+        const filename = params.get('file') || 'evidence_file.bin';
+        const hash = params.get('hash') || 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855';
+        const status = (params.get('status') || 'AUTHENTIC').toUpperCase();
+        const time = params.get('time') || new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+        const officer = params.get('officer') || 'Forensic Investigation Unit';
+        const caseType = params.get('type') || 'Cyber Crime Evidence';
+
+        document.getElementById('caseRef').textContent = caseId;
+        document.getElementById('blockId').textContent = '#' + blockId;
+        document.getElementById('filename').textContent = filename;
+        document.getElementById('evidenceHash').textContent = hash;
+        document.getElementById('timestamp').textContent = time;
+        document.getElementById('officer').textContent = officer;
+        document.getElementById('caseType').textContent = caseType;
+
+        const isTampered = status.includes('TAMPER') || status.includes('COMPROMISED');
+        const badge = document.getElementById('statusBadge');
+        const statusText = document.getElementById('statusText');
+        const legalBox = document.getElementById('legalBox');
+
+        if (isTampered) {
+            badge.className = 'status-badge status-tampered';
+            statusText.textContent = 'CRITICAL: EVIDENCE TAMPERED (COMPROMISED)';
+            badge.children[0].textContent = '🔴';
+            legalBox.style.background = 'rgba(239, 68, 68, 0.1)';
+            legalBox.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+            legalBox.style.color = '#fca5a5';
+            legalBox.innerHTML = '🚨 <strong>FORENSIC BREACH ALERT:</strong> Hash mismatch detected. Evidence has been altered post-seizure and is <strong>INADMISSIBLE</strong> under Section 65B Indian Evidence Act.';
+        } else {
+            badge.className = 'status-badge status-authentic';
+            statusText.textContent = '100% AUTHENTIC & VERIFIED';
+            badge.children[0].textContent = '🟢';
+        }
+    </script>
+</body>
+</html>

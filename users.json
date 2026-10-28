@@ -1,0 +1,58 @@
+[
+    {
+        "user_id": "USR-ADMIN-01",
+        "username": "admin",
+        "full_name": "Chief Forensic Registrar",
+        "role": "admin",
+        "identifier": "SYS-ADMIN-01",
+        "department": "State Forensic Directorate",
+        "password_hash": "d6f484514376b82b68b92520b9dde945cecda83c87faeb9fac74b55706854b9e",
+        "created_at": "2026-10-27 10:23:34 UTC",
+        "is_active": true
+    },
+    {
+        "user_id": "USR-POL-01",
+        "username": "CB-TN-4091",
+        "full_name": "Inspector R. Vikram",
+        "role": "police",
+        "identifier": "CB-TN-4091",
+        "department": "Cyber Crime Investigation Wing",
+        "password_hash": "c782117411a65dc86710f3b20c8cba29255bff9fd99039c3dbfe1a01bc262e9b",
+        "created_at": "2026-10-27 10:23:34 UTC",
+        "is_active": true
+    },
+    {
+        "user_id": "USR-LAW-01",
+        "username": "advocate_kavin",
+        "full_name": "Advocate Kavin R., B.Tech, LL.B",
+        "role": "lawyer",
+        "identifier": "BAR-TN-8092/2024",
+        "department": "High Court Bar Association",
+        "password_hash": "7b6e6b83bacf01d2ba4648452f8beb1da3aba737a3097b4e126fea2f37ec3342",
+        "created_at": "2026-10-27 10:23:34 UTC",
+        "is_active": true
+    },
+    {
+        "user_id": "USR-JUD-01",
+        "username": "justice_sharma",
+        "full_name": "Hon. Justice S. Sharma",
+        "role": "judge",
+        "identifier": "BENCH-SPE-04",
+        "department": "Special Court for Cyber & Financial Crimes",
+        "password_hash": "99c5348db45c85a0d78808678b0bea172dbedd971891fe2a8a500a3d672b789b",
+        "created_at": "2026-10-27 10:23:34 UTC",
+        "is_active": true
+    },
+    {
+        "user_id": "USR-POL-05",
+        "username": "CB-TN-5022",
+        "full_name": "Sub-Inspector Anand",
+        "role": "police",
+        "identifier": "CB-TN-5022",
+        "department": "Cyber Crime Wing Karur",
+        "password_hash": "4df2adfd77dbf6b274c1fc634be42514c6dc475c1c5e1bef1f1c4ee89394512d",
+        "created_at": "2026-10-27 10:34:43 UTC",
+        "created_by": "Chief Forensic Registrar",
+        "is_active": true
+    }
+]

@@ -1,0 +1,20 @@
+[
+    {
+        "log_id": "LOG-0001",
+        "timestamp": "2026-10-27 10:34:43 UTC",
+        "actor": "Advocate Kavin R., B.Tech, LL.B",
+        "role": "LAWYER",
+        "action": "LODGE_DISPUTE",
+        "details": "Filed DSP-2026-101 against Case FIR-2024-CYBER-809 Block #1",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0002",
+        "timestamp": "2026-10-27 10:34:43 UTC",
+        "actor": "Hon. Justice S. Sharma",
+        "role": "JUDGE",
+        "action": "JUDICIAL_RULING",
+        "details": "Issued ruling 'OBJECTION_OVERRULED' on DSP-2026-101",
+        "status": "SUCCESS"
+    }
+]

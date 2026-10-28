@@ -1,0 +1,16 @@
+[
+    {
+        "dispute_id": "DSP-2026-101",
+        "case_id": "FIR-2024-CYBER-809",
+        "block_id": 1,
+        "filed_by": "Advocate Kavin R., B.Tech, LL.B",
+        "bar_id": "BAR-TN-8092/2024",
+        "timestamp": "2026-10-27 10:34:43 UTC",
+        "reason": "Chain gap during transit",
+        "legal_ground": "Sec 65B(2) Condition Breach",
+        "status": "OBJECTION_OVERRULED",
+        "ruling": "Merkle chain verified unbroken.",
+        "ruled_by": "Hon. Justice S. Sharma",
+        "ruling_timestamp": "2026-10-27 10:34:43 UTC"
+    }
+]
