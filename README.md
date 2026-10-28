@@ -224,7 +224,33 @@ Pre-provisioned evaluation accounts for instant testing without manual entry:
 
 ---
 
-## 👨‍💻 Project Authors & Academic Credits
-- **Project Title:** Cryptographic Chain of Custody System for Digital Forensics in Cloud Environments
-- **Lead Developer:** Kavin R. ([@Kavin-124](https://github.com/Kavin-124))
-- **Institution:** Department of Information Technology, V.S.B. Engineering College
+## 👥 Project Team & Contributors
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <a href="https://github.com/Kavin-124">
+          <img src="https://github.com/Kavin-124.png" width="100px" style="border-radius: 50%;" alt="Kavin R."/><br />
+          <br /><b>Kavin R.</b>
+        </a><br />
+        <a href="https://github.com/Kavin-124"><code>@Kavin-124</code></a><br />
+        <sub>Lead Developer & Architecture Engineering</sub>
+      </td>
+      <td align="center" width="50%">
+        <a href="https://github.com/keshav1407">
+          <img src="https://github.com/keshav1407.png" width="100px" style="border-radius: 50%;" alt="Keshav"/><br />
+          <br /><b>Keshav</b>
+        </a><br />
+        <a href="https://github.com/keshav1407"><code>@keshav1407</code></a><br />
+        <sub>Core Developer & Cryptographic Research</sub>
+      </td>
+    </tr>
+  </table>
+
+  <br />
+  <p>
+    <b>Department of Information Technology</b><br/>
+    <b>V.S.B. Engineering College, Karur</b>
+  </p>
+</div>
