@@ -44,7 +44,7 @@ else:
                 </svg>
             </div>
             <div>
-                <div style="font-family: 'TBJ Cota Sans', 'TBJ Cota Sans Demo', sans-serif; font-size: 15px; font-weight: 700; color: #0F172A; letter-spacing: -0.02em;">
+                <div style="font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; color: #0F172A; letter-spacing: -0.02em;">
                     National Forensic Repository // Merkle Custody Engine
                 </div>
                 <div style="font-size: 12px; color: #64748B; font-weight: 400;">
@@ -72,17 +72,17 @@ else:
         current_idx = role_keys.index(current_label) if current_label in role_keys else 0
 
         switched = st.selectbox(
-            "Terminal Context:",
+            "Terminal Context",
             role_keys,
             index=current_idx,
-            key="viva_role_switch"
+            key="viva_role_switch",
+            label_visibility="collapsed"
         )
         if user_ids[switched] != user.get("identifier") and user_ids[switched] != user.get("username"):
             st.session_state["user"] = get_user_by_identifier(user_ids[switched])
             st.rerun()
 
     with nav_c3:
-        st.markdown("<div style='height: 22px;'></div>", unsafe_allow_html=True)
         if st.button("Sign Out", use_container_width=True, type="secondary"):
             st.session_state["authenticated"] = False
             st.session_state["user"] = None

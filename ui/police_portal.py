@@ -90,133 +90,114 @@ def render_police_portal(user: dict):
     with pol_tab1:
         st.markdown("""
         <div class="forensic-card">
-            <h3>1. Electronic Artifact Seizure & Merkle Ingestion</h3>
-            <p>
-                Ingest seized digital evidence (CCTV footage, disk bitstreams, packet captures, mobile extractions). 
-                The system executes automated magic-byte header analysis, computes cryptographic SHA-256 digests, and binds the artifact to the chronological Merkle ledger.
-            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; margin-bottom: 16px;">
+                <div>
+                    <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #0F172A;">1. Electronic Artifact Seizure & Merkle Ingestion</h3>
+                    <p style="margin: 4px 0 0 0; font-size: 13px; color: #64748B;">
+                        Capture digital bitstreams, execute automated magic-byte verification, derive SHA-256 digests, and anchor into the immutable custody ledger.
+                    </p>
+                </div>
+                <span class="inst-badge police">BSA 2023 §63 COMPLIANT</span>
+            </div>
+        """, unsafe_allow_html=True)
+
+        uploaded_file = st.file_uploader(
+            "Select Digital Evidence Artifact to Ingest:",
+            type=None,
+            help="Accepts all binary file extensions (.mp4, .png, .jpg, .pdf, .raw, .img, .pcap, .txt, .zip)"
+        )
+
+        # Live AI Magic-Byte Scanner Preview
+        magic_info = None
+        if uploaded_file is not None:
+            file_bytes = uploaded_file.getvalue()
+            magic_info = detect_magic_bytes(file_bytes, uploaded_file.name)
+
+            if magic_info.get("is_spoofed"):
+                st.error(f"""
+                **Security Anomaly Detected: Binary Masquerade Alert**  
+                The declared file extension claims to be `.{uploaded_file.name.split('.')[-1]}` but the true binary header is:
+                **{magic_info.get('true_type')}**. This artifact exhibits Trojan masquerade characteristics.
+                """)
+            else:
+                st.success(f"**Binary Signature Verified:** {magic_info.get('true_type')} (MIME alignment confirmed) | Header Hex: `{magic_info.get('magic_hex', 'N/A')}`")
+
+        # Case Metadata Form
+        col_fir, col_type = st.columns(2)
+        with col_fir:
+            case_id = st.text_input("FIR / Case Docket Reference", value=f"FIR-{datetime.utcnow().year}-CYBER-101")
+        with col_type:
+            case_type = st.selectbox(
+                "Offense Classification",
+                [
+                    "Corporate Espionage & Data Exfiltration",
+                    "Ransomware & Cyber Extortion",
+                    "Financial Banking Fraud & Phishing",
+                    "Unauthorized Server Access & Web Defacement",
+                    "Critical Infrastructure Cyber Sabotage",
+                    "Cryptocurrency Laundering"
+                ]
+            )
+
+        col_victim, col_loc = st.columns(2)
+        with col_victim:
+            victim_name = st.text_input("Complainant / Victim Entity", value="State Defense Research Org")
+        with col_loc:
+            location = st.selectbox(
+                "Crime Scene Jurisdiction",
+                ["Chennai", "Coimbatore", "Karur", "Madurai", "Tiruchirappalli", "Salem"]
+            )
+
+        seizure_notes = st.text_area("Seizure Protocol & Write-Blocker Affidavit", "Seized directly from crime scene server room. Hardware bitstream write-blocker attached prior to extraction.")
+
+        st.markdown("""
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 3px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin: 10px 0 16px 0;">
+            <div style="font-size: 11.5px; font-weight: 700; color: #0F172A; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">
+                Statutory Admissibility Affirmation (Section 65B(2) IEA & Section 63 BSA 2023)
+            </div>
+            <div style="font-size: 12px; color: #475569; line-height: 1.5;">
+                • Electronic record remained in continuous lawful custody • Hardware write-blocking procedures prevented bitstream alteration • Synchronous dual-vault storage eliminates single point of failure • Cryptographic hash chaining guarantees non-repudiation.
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
-        col_left, col_right = st.columns([1.8, 1.2])
+        if st.button("Commit Artifact to Merkle Chain →", type="primary", use_container_width=True):
+            if uploaded_file is None:
+                st.warning("Please select an evidence file before committing to the ledger.")
+            else:
+                with st.spinner("Computing NIST SHA-256 digest, deriving HMAC signature & synchronizing vault mirror..."):
+                    lat, lon = extract_gps_coords(location_str=location)
+                    new_block = add_evidence_block(
+                        file_bytes=uploaded_file.getvalue(),
+                        filename=uploaded_file.name,
+                        case_id=case_id,
+                        case_type=case_type,
+                        victim_name=victim_name,
+                        officer_name=user.get("full_name"),
+                        badge_id=user.get("identifier"),
+                        seizure_location=f"{location} Cyber Crime Cell",
+                        latitude=lat,
+                        longitude=lon,
+                        notes=seizure_notes
+                    )
 
-        with col_left:
-            uploaded_file = st.file_uploader(
-                "Select Digital Evidence Artifact to Ingest:",
-                type=None,
-                help="Accepts all binary file extensions (.mp4, .png, .jpg, .pdf, .raw, .img, .pcap, .txt, .zip)"
-            )
+                    log_event(
+                        user.get("full_name"),
+                        "POLICE",
+                        "EVIDENCE_SEIZURE",
+                        f"Seized '{uploaded_file.name}' for {case_id} (Block #{new_block['block_id']})"
+                    )
 
-            # Live AI Magic-Byte Scanner Preview
-            magic_info = None
-            if uploaded_file is not None:
-                file_bytes = uploaded_file.getvalue()
-                magic_info = detect_magic_bytes(file_bytes, uploaded_file.name)
-
-                if magic_info.get("is_spoofed"):
-                    st.error(f"""
-                    **Security Anomaly Detected: Binary Masquerade Alert**
-                    The declared file extension claims to be `.{uploaded_file.name.split('.')[-1]}` but the true binary header is:
-                    **{magic_info.get('true_type')}**. This artifact exhibits Trojan masquerade characteristics.
+                    st.success(f"""
+                    **Artifact Successfully Bound to Immutable Ledger:**
+                    - **Block Index:** Block #{new_block['block_id']}
+                    - **SHA-256 Digest:** `{new_block['evidence_hash'][:32]}...`
+                    - **Dual Vault Storage:** Synchronized to local and cloud repositories
+                    - **Timestamp:** {new_block['timestamp']}
                     """)
-                else:
-                    st.success(f"**Binary Signature Verified:** {magic_info.get('true_type')} (MIME alignment confirmed)")
+                    st.rerun()
 
-            # Case Metadata Form
-            col_fir, col_type = st.columns(2)
-            with col_fir:
-                case_id = st.text_input("FIR / Case Docket Reference", value=f"FIR-{datetime.utcnow().year}-CYBER-101", help="Official police case docket ID")
-            with col_type:
-                case_type = st.selectbox(
-                    "Offense Classification",
-                    [
-                        "Corporate Espionage & Data Exfiltration",
-                        "Ransomware & Cyber Extortion",
-                        "Financial Banking Fraud & Phishing",
-                        "Unauthorized Server Access & Web Defacement",
-                        "Critical Infrastructure Cyber Sabotage",
-                        "Cryptocurrency Laundering"
-                    ]
-                )
-
-            col_victim, col_loc = st.columns(2)
-            with col_victim:
-                victim_name = st.text_input("Complainant / Victim Entity", value="State Defense Research Org")
-            with col_loc:
-                location = st.selectbox(
-                    "Crime Scene Jurisdiction",
-                    ["Chennai", "Coimbatore", "Karur", "Madurai", "Tiruchirappalli", "Salem"]
-                )
-
-            seizure_notes = st.text_area("Seizure Protocol & Write-Blocker Affidavit", "Seized directly from crime scene server room. Hardware bitstream write-blocker attached prior to extraction.")
-
-            if st.button("Commit Artifact to Merkle Chain", type="primary", use_container_width=True):
-                if uploaded_file is None:
-                    st.warning("Please select an evidence file before committing to the ledger.")
-                else:
-                    with st.spinner("Computing NIST SHA-256 digest, deriving HMAC signature & synchronizing vault mirror..."):
-                        lat, lon = extract_gps_coords(location_str=location)
-                        new_block = add_evidence_block(
-                            file_bytes=uploaded_file.getvalue(),
-                            filename=uploaded_file.name,
-                            case_id=case_id,
-                            case_type=case_type,
-                            victim_name=victim_name,
-                            officer_name=user.get("full_name"),
-                            badge_id=user.get("identifier"),
-                            seizure_location=f"{location} Cyber Crime Cell",
-                            latitude=lat,
-                            longitude=lon,
-                            notes=seizure_notes
-                        )
-
-                        log_event(
-                            user.get("full_name"),
-                            "POLICE",
-                            "EVIDENCE_SEIZURE",
-                            f"Seized '{uploaded_file.name}' for {case_id} (Block #{new_block['block_id']})"
-                        )
-
-                        st.success(f"""
-                        **Artifact Successfully Bound to Immutable Ledger:**
-                        - **Block Index:** Block #{new_block['block_id']}
-                        - **SHA-256 Digest:** `{new_block['evidence_hash'][:32]}...`
-                        - **Dual Vault Storage:** Synchronized to local and cloud repositories
-                        - **Timestamp:** {new_block['timestamp']}
-                        """)
-                        st.rerun()
-
-        with col_right:
-            st.markdown("""
-            <div class="forensic-card" style="background: #F8FAFC; border-left: 3px solid #2563EB;">
-                <div style="font-size: 12px; font-weight: 700; color: #0F172A; text-transform: uppercase; margin-bottom: 6px;">
-                    Statutory Admissibility Mandate
-                </div>
-                <p style="font-size: 12px; color: #475569; line-height: 1.6;">
-                    Under <strong>Section 65B(2)</strong> of the Indian Evidence Act and <strong>Section 63</strong> of BSA 2023, the seizing officer affirms:
-                </p>
-                <ul style="font-size: 11.5px; color: #64748B; padding-left: 16px; line-height: 1.6; margin-top: 6px;">
-                    <li>Electronic record remained in continuous lawful custody.</li>
-                    <li>Write-blocking procedures prevented bitstream alteration.</li>
-                    <li>Synchronous dual-storage mitigates single point of failure.</li>
-                    <li>Cryptographic hash chaining ensures non-repudiation.</li>
-                </ul>
-            </div>
-            """, unsafe_allow_html=True)
-
-            if magic_info:
-                st.markdown(f"""
-                <div class="forensic-card">
-                    <div style="font-size: 12px; font-weight: 700; color: #0F172A; margin-bottom: 6px;">
-                        Binary Signature Inspection:
-                    </div>
-                    <div style="font-size: 12px; color: #475569; line-height: 1.6;">
-                        <div>• Detected MIME: <strong>{magic_info.get('true_type')}</strong></div>
-                        <div>• Header Signature: <code>{magic_info.get('magic_hex', 'N/A')}</code></div>
-                        <div>• Anomaly Flag: <strong style="color: {'#DC2626' if magic_info.get('is_spoofed') else '#059669'};">{'MASQUERADE RISK' if magic_info.get('is_spoofed') else 'CLEAN BITSTREAM'}</strong></div>
-                    </div>
-                </div>
-                """, unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
     # ---------------- TAB 2: SEIZED EVIDENCE LOCKER ----------------
     with pol_tab2:
