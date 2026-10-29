@@ -184,14 +184,30 @@ def render_police_portal(user: dict):
                             f"Seized '{uploaded_file.name}' for {case_id} (Block #{new_block['block_id']})"
                         )
 
-                        st.success(f"""
-                        **Artifact Successfully Bound to Immutable Ledger:**
-                        - **Block Index:** Block #{new_block['block_id']}
-                        - **SHA-256 Digest:** `{new_block['evidence_hash'][:32]}...`
-                        - **Dual Vault Storage:** Synchronized to local and cloud repositories
-                        - **Timestamp:** {new_block['timestamp']}
-                        """)
-                        st.rerun()
+                        st.session_state["recent_ingested_block"] = new_block
+                        st.toast(f"Exhibit #{new_block['block_id']} permanently bound to Merkle Ledger!", icon="⚖️")
+                        st.success(f"✅ Artifact Successfully Bound to Immutable Ledger as Block #{new_block['block_id']}!")
+                        st.markdown(f"""
+                        <div style="background: #F0FDF4; border: 1px solid #86EFAC; border-left: 4px solid #16A34A; border-radius: 8px; padding: 16px 20px; margin: 14px 0 16px 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #DCFCE7; padding-bottom: 8px; margin-bottom: 12px;">
+                                <div style="font-size: 14.5px; font-weight: 700; color: #166534;">
+                                    Official Cryptographic Seizure Receipt // Merkle Block #{new_block['block_id']}
+                                </div>
+                                <span class="inst-badge admin">IMMUTABLE ANCHOR</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; font-size: 13px; color: #1E293B;">
+                                <div><strong>Artifact Name:</strong> <code>{uploaded_file.name}</code> ({len(uploaded_file.getvalue()) / (1024*1024):.2f} MB)</div>
+                                <div><strong>Case Reference:</strong> <code style="color: #2563EB;">{case_id}</code> ({case_type})</div>
+                                <div><strong>Seizing Officer:</strong> {user.get('full_name')} (<code>{user.get('identifier')}</code>)</div>
+                                <div><strong>Seizure Location:</strong> {location} Cyber Crime Cell</div>
+                                <div style="grid-column: span 2;"><strong>NIST SHA-256 Digest:</strong> <code style="font-size: 12px; color: #0284C7;">{new_block['evidence_hash']}</code></div>
+                                <div style="grid-column: span 2;"><strong>Dual-Vault Status:</strong> <span style="color: #059669; font-weight: 600;">✓ Synchronized to On-Premises Vault & Encrypted Cloud Mirror</span></div>
+                            </div>
+                            <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid #DCFCE7; font-size: 12.5px; color: #15803D;">
+                                📌 <strong>Next Step:</strong> Switch to <strong>Tab 2 (Custody Vault Ledger)</strong> to inspect the exhibit block, or <strong>Tab 3 (Inter-Agency Handover)</strong> to execute a transfer challan!
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
 
     # ---------------- TAB 2: SEIZED EVIDENCE LOCKER ----------------
     with pol_tab2:

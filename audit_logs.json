@@ -25,5 +25,86 @@
         "action": "CUSTODY_HANDOVER",
         "details": "Transferred Block #1 to State Forensic Science Laboratory (FSL Chennai)",
         "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0004",
+        "timestamp": "2026-10-29 05:34:28 UTC",
+        "actor": "Chief Forensic Registrar",
+        "role": "ADMIN",
+        "action": "SYSTEM_RESET",
+        "details": "Purged evidence vault and reset ledger",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0005",
+        "timestamp": "2026-10-29 05:34:32 UTC",
+        "actor": "Chief Forensic Registrar",
+        "role": "ADMIN",
+        "action": "SYSTEM_RESET",
+        "details": "Purged evidence vault and reset ledger",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0006",
+        "timestamp": "2026-10-29 05:42:46 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "EVIDENCE_SEIZURE",
+        "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #1)",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0007",
+        "timestamp": "2026-10-29 05:42:51 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "EVIDENCE_SEIZURE",
+        "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #2)",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0008",
+        "timestamp": "2026-10-29 05:42:53 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "EVIDENCE_SEIZURE",
+        "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #3)",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0009",
+        "timestamp": "2026-10-29 05:43:00 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "EVIDENCE_SEIZURE",
+        "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #4)",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0010",
+        "timestamp": "2026-10-29 05:43:16 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "EVIDENCE_SEIZURE",
+        "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #5)",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0011",
+        "timestamp": "2026-10-29 05:43:17 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "EVIDENCE_SEIZURE",
+        "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #6)",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0012",
+        "timestamp": "2026-10-29 05:43:18 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "EVIDENCE_SEIZURE",
+        "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #6)",
+        "status": "SUCCESS"
     }
 ]

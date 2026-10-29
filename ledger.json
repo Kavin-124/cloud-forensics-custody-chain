@@ -128,5 +128,59 @@
         },
         "latitude": 11.00475,
         "longitude": 77.56175
+    },
+    {
+        "block_id": 4,
+        "timestamp": "2026-10-29 05:42:46 UTC",
+        "case_id": "FIR-2026-CYBER-101",
+        "case_type": "Corporate Espionage & Data Exfiltration",
+        "victim_name": "State Defense Research Org",
+        "officer_name": "Inspector R. Vikram",
+        "badge_id": "CB-TN-4091",
+        "seizure_location": "Chennai Cyber Crime Cell",
+        "latitude": 13.08245,
+        "longitude": 80.27045,
+        "original_filename": "lv_0_20260811235747.mp4",
+        "stored_filename": "1_lv_0_20260811235747.mp4",
+        "file_size_bytes": 49063061,
+        "metadata": {
+            "device_make": "Not Available / Generic",
+            "device_model": "Raw Forensic Stream (.MP4)",
+            "original_date": "N/A",
+            "dimensions": "N/A",
+            "latitude": 13.08245,
+            "longitude": 80.27045,
+            "crime_scene_location": "Chennai Cyber Crime Cell",
+            "notes": "Seized directly from crime scene server room. Hardware bitstream write-blocker attached prior to extraction."
+        },
+        "magic_inspection": {
+            "true_type": "ISO MPEG-4 Container (isom)",
+            "true_mime": "video/mp4",
+            "magic_hex": "00 00 00 20 66 74 79 70",
+            "declared_extension": "mp4",
+            "is_spoofed": false,
+            "severity": "CLEAN",
+            "verdict": "VERIFIED: True binary header strictly matches claimed '.mp4' (ISO MPEG-4 Container (isom))",
+            "hex_dump": "00000000:  00 00 00 20 66 74 79 70 69 73 6F 6D 00 00 02 00  |... ftypisom....|\n00000010:  69 73 6F 6D 69 73 6F 32 61 76 63 31 6D 70 34 31  |isomiso2avc1mp41|\n00000020:  00 00 00 08 66 72 65 65 02 EB C2 6F 6D 64 61 74  |....free...omdat|\n00000030:  21 11 45 00 14 50 01 47 21 21 45 00 14 50 01 47  |!.E..P.G!!E..P.G|"
+        },
+        "custody_trail": [
+            {
+                "step_no": 1,
+                "challan_id": "CHL-2026-CYBER-101-T1",
+                "timestamp": "2026-10-29 05:42:46 UTC",
+                "from_entity": "Crime Scene / Seizure Site",
+                "to_entity": "Inspector R. Vikram (CB-TN-4091)",
+                "purpose": "Initial Seizure & Cryptographic Ingestion",
+                "transferor_pin": "SEIZURE-ORDER-VAL",
+                "recipient_token": "CUSTODY-VAULT-ROOT",
+                "transferor_hmac": "cf8932db2b6ac5a8d9dedf79c0f4fed9aa1226220992bdffefc2e5286a551ba3",
+                "recipient_hmac": "c0b7d4a539512e9bcffe5be70a005c544b811ac9e9b7be3330b791b541e2b2b2",
+                "custody_status": "Evidence Locked in Vault"
+            }
+        ],
+        "evidence_hash": "ff91f113d43a23fcc439b3ecab5108054a01647c62fbe944542cc427d50db161",
+        "prev_hash": "0148f7ef7b0b27c10b4200784d26e9710020d005ec4c84af51cbe01da1d4287d",
+        "hmac_sig": "20726b723d89236c1fe27cef9c5d6ac81ddd1cf637dafbb4401f743df759404f",
+        "block_hash": "b8b3b547e5d301a4b990dad5222a1a9bc08e8b25d75e8ed939f6db2c1c9ef061"
     }
 ]
