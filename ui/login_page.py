@@ -15,7 +15,7 @@ def render_login_page():
         <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; color: #2563EB; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">
             National Digital Forensic Evidence Vault
         </div>
-        <h1 style="font-family: 'TBJ Cota Sans', 'TBJ Cota Sans Demo', sans-serif; font-size: 26px; font-weight: 700; color: #0F172A; margin: 0; letter-spacing: -0.02em;">
+        <h1 style="font-family: 'Inter', sans-serif; font-size: 26px; font-weight: 700; color: #0F172A; margin: 0; letter-spacing: -0.02em;">
             Cryptographic Chain of Custody System
         </h1>
         <p style="font-size: 13.5px; color: #475569; margin: 6px 0 14px 0; font-weight: 400;">
@@ -37,7 +37,7 @@ def render_login_page():
         <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; box-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05); margin-bottom: 18px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px;">
                 <div>
-                    <div style="font-family: 'TBJ Cota Sans', 'TBJ Cota Sans Demo', sans-serif; font-size: 14px; font-weight: 700; color: #0F172A; letter-spacing: -0.01em;">
+                    <div style="font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700; color: #0F172A; letter-spacing: -0.01em;">
                         Authentication Gateway
                     </div>
                     <div style="font-size: 12px; color: #64748B;">
@@ -163,7 +163,7 @@ def render_login_page():
         # Institutional Examiner / Developer Sandbox
         st.markdown("""
         <div style="margin-top: 14px; text-align: center;">
-            <div style="font-family: 'TBJ Cota Sans', 'TBJ Cota Sans Demo', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748B; margin-bottom: 8px;">
+            <div style="font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #64748B; margin-bottom: 8px;">
                 Institutional Sandbox (Evaluation Mode)
             </div>
         </div>

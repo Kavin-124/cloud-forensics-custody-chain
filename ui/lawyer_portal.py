@@ -40,38 +40,34 @@ def render_lawyer_portal(user: dict):
     # Operational Metrics
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Total Case Exhibits</div>
             <div class="metric-value">{len(chain)}</div>
             <div class="metric-sub">Ledger Available</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m2:
-        cases_count = len(set(b.get("case_id") for b in chain)) if chain else 0
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            cases_count = len(set(b.get("case_id") for b in chain)) if chain else 0
+            st.markdown(f"""
             <div class="metric-label">Court Dockets Tracked</div>
             <div class="metric-value">{cases_count}</div>
             <div class="metric-sub">Active Docket Records</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m3:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Chain Continuity</div>
             <div class="metric-value" style="color: #059669;">100% Cryptographic</div>
             <div class="metric-sub">Merkle Root Verified</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m4:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Objections Lodged</div>
             <div class="metric-value">{len(my_disputes)}</div>
             <div class="metric-sub">Judicial Bench Review</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
     st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 

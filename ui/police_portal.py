@@ -43,38 +43,34 @@ def render_police_portal(user: dict):
     # Key Operational Metrics
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Seized Artifacts</div>
             <div class="metric-value">{len(officer_blocks)}</div>
             <div class="metric-sub">Across Registered FIR Dockets</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m2:
-        cases_count = len(set(b.get("case_id") for b in officer_blocks)) if officer_blocks else 0
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            cases_count = len(set(b.get("case_id") for b in officer_blocks)) if officer_blocks else 0
+            st.markdown(f"""
             <div class="metric-label">Active Investigations</div>
             <div class="metric-value">{cases_count}</div>
             <div class="metric-sub">Cyber Crime Division</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m3:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Cloud Dual-Vault Mirror</div>
             <div class="metric-value" style="color: #059669;">Synchronized</div>
             <div class="metric-sub">Disaster Recovery Active</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m4:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Statutory Compliance</div>
             <div class="metric-value">Section 65B</div>
             <div class="metric-sub">Indian Evidence Act / BSA 2023</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
     st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 
@@ -88,8 +84,8 @@ def render_police_portal(user: dict):
 
     # ---------------- TAB 1: EVIDENCE INGESTION ----------------
     with pol_tab1:
-        st.markdown("""
-        <div class="forensic-card">
+        with st.container(border=True):
+            st.markdown("""
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px; margin-bottom: 16px;">
                 <div>
                     <h3 style="margin: 0; font-size: 17px; font-weight: 700; color: #0F172A;">1. Electronic Artifact Seizure & Merkle Ingestion</h3>
@@ -99,105 +95,103 @@ def render_police_portal(user: dict):
                 </div>
                 <span class="inst-badge police">BSA 2023 §63 COMPLIANT</span>
             </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
-        uploaded_file = st.file_uploader(
-            "Select Digital Evidence Artifact to Ingest:",
-            type=None,
-            help="Accepts all binary file extensions (.mp4, .png, .jpg, .pdf, .raw, .img, .pcap, .txt, .zip)"
-        )
-
-        # Live AI Magic-Byte Scanner Preview
-        magic_info = None
-        if uploaded_file is not None:
-            file_bytes = uploaded_file.getvalue()
-            magic_info = detect_magic_bytes(file_bytes, uploaded_file.name)
-
-            if magic_info.get("is_spoofed"):
-                st.error(f"""
-                **Security Anomaly Detected: Binary Masquerade Alert**  
-                The declared file extension claims to be `.{uploaded_file.name.split('.')[-1]}` but the true binary header is:
-                **{magic_info.get('true_type')}**. This artifact exhibits Trojan masquerade characteristics.
-                """)
-            else:
-                st.success(f"**Binary Signature Verified:** {magic_info.get('true_type')} (MIME alignment confirmed) | Header Hex: `{magic_info.get('magic_hex', 'N/A')}`")
-
-        # Case Metadata Form
-        col_fir, col_type = st.columns(2)
-        with col_fir:
-            case_id = st.text_input("FIR / Case Docket Reference", value=f"FIR-{datetime.utcnow().year}-CYBER-101")
-        with col_type:
-            case_type = st.selectbox(
-                "Offense Classification",
-                [
-                    "Corporate Espionage & Data Exfiltration",
-                    "Ransomware & Cyber Extortion",
-                    "Financial Banking Fraud & Phishing",
-                    "Unauthorized Server Access & Web Defacement",
-                    "Critical Infrastructure Cyber Sabotage",
-                    "Cryptocurrency Laundering"
-                ]
+            uploaded_file = st.file_uploader(
+                "Select Digital Evidence Artifact to Ingest:",
+                type=None,
+                help="Accepts all binary file extensions (.mp4, .png, .jpg, .pdf, .raw, .img, .pcap, .txt, .zip)"
             )
 
-        col_victim, col_loc = st.columns(2)
-        with col_victim:
-            victim_name = st.text_input("Complainant / Victim Entity", value="State Defense Research Org")
-        with col_loc:
-            location = st.selectbox(
-                "Crime Scene Jurisdiction",
-                ["Chennai", "Coimbatore", "Karur", "Madurai", "Tiruchirappalli", "Salem"]
-            )
+            # Live AI Magic-Byte Scanner Preview
+            magic_info = None
+            if uploaded_file is not None:
+                file_bytes = uploaded_file.getvalue()
+                magic_info = detect_magic_bytes(file_bytes, uploaded_file.name)
 
-        seizure_notes = st.text_area("Seizure Protocol & Write-Blocker Affidavit", "Seized directly from crime scene server room. Hardware bitstream write-blocker attached prior to extraction.")
-
-        st.markdown("""
-        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 3px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin: 10px 0 16px 0;">
-            <div style="font-size: 11.5px; font-weight: 700; color: #0F172A; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">
-                Statutory Admissibility Affirmation (Section 65B(2) IEA & Section 63 BSA 2023)
-            </div>
-            <div style="font-size: 12px; color: #475569; line-height: 1.5;">
-                • Electronic record remained in continuous lawful custody • Hardware write-blocking procedures prevented bitstream alteration • Synchronous dual-vault storage eliminates single point of failure • Cryptographic hash chaining guarantees non-repudiation.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        if st.button("Commit Artifact to Merkle Chain →", type="primary", use_container_width=True):
-            if uploaded_file is None:
-                st.warning("Please select an evidence file before committing to the ledger.")
-            else:
-                with st.spinner("Computing NIST SHA-256 digest, deriving HMAC signature & synchronizing vault mirror..."):
-                    lat, lon = extract_gps_coords(location_str=location)
-                    new_block = add_evidence_block(
-                        file_bytes=uploaded_file.getvalue(),
-                        filename=uploaded_file.name,
-                        case_id=case_id,
-                        case_type=case_type,
-                        victim_name=victim_name,
-                        officer_name=user.get("full_name"),
-                        badge_id=user.get("identifier"),
-                        seizure_location=f"{location} Cyber Crime Cell",
-                        latitude=lat,
-                        longitude=lon,
-                        notes=seizure_notes
-                    )
-
-                    log_event(
-                        user.get("full_name"),
-                        "POLICE",
-                        "EVIDENCE_SEIZURE",
-                        f"Seized '{uploaded_file.name}' for {case_id} (Block #{new_block['block_id']})"
-                    )
-
-                    st.success(f"""
-                    **Artifact Successfully Bound to Immutable Ledger:**
-                    - **Block Index:** Block #{new_block['block_id']}
-                    - **SHA-256 Digest:** `{new_block['evidence_hash'][:32]}...`
-                    - **Dual Vault Storage:** Synchronized to local and cloud repositories
-                    - **Timestamp:** {new_block['timestamp']}
+                if magic_info.get("is_spoofed"):
+                    st.error(f"""
+                    **Security Anomaly Detected: Binary Masquerade Alert**  
+                    The declared file extension claims to be `.{uploaded_file.name.split('.')[-1]}` but the true binary header is:
+                    **{magic_info.get('true_type')}**. This artifact exhibits Trojan masquerade characteristics.
                     """)
-                    st.rerun()
+                else:
+                    st.success(f"**Binary Signature Verified:** {magic_info.get('true_type')} (MIME alignment confirmed) | Header Hex: `{magic_info.get('magic_hex', 'N/A')}`")
 
-        st.markdown("</div>", unsafe_allow_html=True)
+            # Case Metadata Form
+            col_fir, col_type = st.columns(2)
+            with col_fir:
+                case_id = st.text_input("FIR / Case Docket Reference", value=f"FIR-{datetime.utcnow().year}-CYBER-101")
+            with col_type:
+                case_type = st.selectbox(
+                    "Offense Classification",
+                    [
+                        "Corporate Espionage & Data Exfiltration",
+                        "Ransomware & Cyber Extortion",
+                        "Financial Banking Fraud & Phishing",
+                        "Unauthorized Server Access & Web Defacement",
+                        "Critical Infrastructure Cyber Sabotage",
+                        "Cryptocurrency Laundering"
+                    ]
+                )
+
+            col_victim, col_loc = st.columns(2)
+            with col_victim:
+                victim_name = st.text_input("Complainant / Victim Entity", value="State Defense Research Org")
+            with col_loc:
+                location = st.selectbox(
+                    "Crime Scene Jurisdiction",
+                    ["Chennai", "Coimbatore", "Karur", "Madurai", "Tiruchirappalli", "Salem"]
+                )
+
+            seizure_notes = st.text_area("Seizure Protocol & Write-Blocker Affidavit", "Seized directly from crime scene server room. Hardware bitstream write-blocker attached prior to extraction.")
+
+            st.markdown("""
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-left: 3px solid #2563EB; border-radius: 8px; padding: 12px 16px; margin: 10px 0 16px 0;">
+                <div style="font-size: 11.5px; font-weight: 700; color: #0F172A; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 2px;">
+                    Statutory Admissibility Affirmation (Section 65B(2) IEA & Section 63 BSA 2023)
+                </div>
+                <div style="font-size: 12px; color: #475569; line-height: 1.5;">
+                    • Electronic record remained in continuous lawful custody • Hardware write-blocking procedures prevented bitstream alteration • Synchronous dual-vault storage eliminates single point of failure • Cryptographic hash chaining guarantees non-repudiation.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            if st.button("Commit Artifact to Merkle Chain →", type="primary", use_container_width=True):
+                if uploaded_file is None:
+                    st.warning("Please select an evidence file before committing to the ledger.")
+                else:
+                    with st.spinner("Computing NIST SHA-256 digest, deriving HMAC signature & synchronizing vault mirror..."):
+                        lat, lon = extract_gps_coords(location_str=location)
+                        new_block = add_evidence_block(
+                            file_bytes=uploaded_file.getvalue(),
+                            filename=uploaded_file.name,
+                            case_id=case_id,
+                            case_type=case_type,
+                            victim_name=victim_name,
+                            officer_name=user.get("full_name"),
+                            badge_id=user.get("identifier"),
+                            seizure_location=f"{location} Cyber Crime Cell",
+                            latitude=lat,
+                            longitude=lon,
+                            notes=seizure_notes
+                        )
+
+                        log_event(
+                            user.get("full_name"),
+                            "POLICE",
+                            "EVIDENCE_SEIZURE",
+                            f"Seized '{uploaded_file.name}' for {case_id} (Block #{new_block['block_id']})"
+                        )
+
+                        st.success(f"""
+                        **Artifact Successfully Bound to Immutable Ledger:**
+                        - **Block Index:** Block #{new_block['block_id']}
+                        - **SHA-256 Digest:** `{new_block['evidence_hash'][:32]}...`
+                        - **Dual Vault Storage:** Synchronized to local and cloud repositories
+                        - **Timestamp:** {new_block['timestamp']}
+                        """)
+                        st.rerun()
 
     # ---------------- TAB 2: SEIZED EVIDENCE LOCKER ----------------
     with pol_tab2:
@@ -256,46 +250,47 @@ def render_police_portal(user: dict):
         if not chain:
             st.warning("No evidence artifacts in ledger to transfer.")
         else:
-            block_options = {f"Exhibit #{b['block_id']}: {b.get('original_filename')} ({b.get('case_id')})": b['block_id'] for b in chain}
-            sel_label = st.selectbox("Select Evidence Artifact to Hand Over:", list(block_options.keys()))
-            target_block_id = block_options[sel_label]
+            with st.container(border=True):
+                block_options = {f"Exhibit #{b['block_id']}: {b.get('original_filename')} ({b.get('case_id')})": b['block_id'] for b in chain}
+                sel_label = st.selectbox("Select Evidence Artifact to Hand Over:", list(block_options.keys()))
+                target_block_id = block_options[sel_label]
 
-            col_h1, col_h2 = st.columns(2)
-            with col_h1:
-                from_entity = st.text_input("Transferor Authority / Officer", value=f"{user.get('full_name')} ({user.get('identifier')})")
-                transferor_pin = st.text_input("Transferor Digital PIN", type="password", value="9876", help="Secret PIN of releasing officer")
-            with col_h2:
-                to_entity = st.text_input("Recipient Agency / Department", value="State Forensic Science Laboratory (FSL Chennai)")
-                purpose = st.selectbox(
-                    "Transfer Purpose",
-                    ["Forensic Bitstream Clone & Deleted File Recovery", "Malware Extraction & Reverse Engineering", "Court Presentation & Evidence Box Deposit"]
-                )
-
-            if st.button("Execute Custodial Handover & Issue Challan", type="primary", use_container_width=True):
-                success, msg, new_step = record_custody_transfer(
-                    target_block_id,
-                    from_entity=from_entity,
-                    to_entity=to_entity,
-                    purpose=purpose,
-                    transferor_pin=transferor_pin,
-                    recipient_token="FSL-RECV-KEY-2024"
-                )
-                if success:
-                    log_event(user.get("full_name"), "POLICE", "CUSTODY_HANDOVER", f"Transferred Block #{target_block_id} to {to_entity}")
-                    st.success(f"Custody Step #{new_step['step_no']} registered. Challan ID: `{new_step['challan_id']}`")
-
-                    # Generate and allow download of Challan PDF
-                    target_block = next(b for b in get_ledger() if b["block_id"] == target_block_id)
-                    challan_bytes = generate_handover_challan_pdf(target_block, new_step)
-                    st.download_button(
-                        label="Download Official Custody Transfer Challan (PDF)",
-                        data=challan_bytes,
-                        file_name=f"Handover_Challan_{new_step['challan_id']}.pdf",
-                        mime="application/pdf",
-                        use_container_width=True
+                col_h1, col_h2 = st.columns(2)
+                with col_h1:
+                    from_entity = st.text_input("Transferor Authority / Officer", value=f"{user.get('full_name')} ({user.get('identifier')})")
+                    transferor_pin = st.text_input("Transferor Digital PIN", type="password", value="9876", help="Secret PIN of releasing officer")
+                with col_h2:
+                    to_entity = st.text_input("Recipient Agency / Department", value="State Forensic Science Laboratory (FSL Chennai)")
+                    purpose = st.selectbox(
+                        "Transfer Purpose",
+                        ["Forensic Bitstream Clone & Deleted File Recovery", "Malware Extraction & Reverse Engineering", "Court Presentation & Evidence Box Deposit"]
                     )
-                else:
-                    st.error(msg)
+
+                if st.button("Execute Custodial Handover & Issue Challan", type="primary", use_container_width=True):
+                    success, msg, new_step = record_custody_transfer(
+                        target_block_id,
+                        from_entity=from_entity,
+                        to_entity=to_entity,
+                        purpose=purpose,
+                        transferor_pin=transferor_pin,
+                        recipient_token="FSL-RECV-KEY-2024"
+                    )
+                    if success:
+                        log_event(user.get("full_name"), "POLICE", "CUSTODY_HANDOVER", f"Transferred Block #{target_block_id} to {to_entity}")
+                        st.success(f"Custody Step #{new_step['step_no']} registered. Challan ID: `{new_step['challan_id']}`")
+
+                        # Generate and allow download of Challan PDF
+                        target_block = next(b for b in get_ledger() if b["block_id"] == target_block_id)
+                        challan_bytes = generate_handover_challan_pdf(target_block, new_step)
+                        st.download_button(
+                            label="Download Official Custody Transfer Challan (PDF)",
+                            data=challan_bytes,
+                            file_name=f"Handover_Challan_{new_step['challan_id']}.pdf",
+                            mime="application/pdf",
+                            use_container_width=True
+                        )
+                    else:
+                        st.error(msg)
 
     # ---------------- TAB 4: CRIME SCENE GEOLOCATION ----------------
     with pol_tab4:

@@ -44,37 +44,33 @@ def render_admin_portal(user: dict):
     # Operational Metrics
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Provisioned Personnel</div>
             <div class="metric-value">{len(users)}</div>
             <div class="metric-sub">Police, Counsel, Bench Accounts</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m2:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Audit Telemetry Events</div>
             <div class="metric-value">{len(logs)}</div>
             <div class="metric-sub">Immutable Trace Log Entries</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m3:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Active Ledger Blocks</div>
             <div class="metric-value">{len(chain)}</div>
             <div class="metric-sub">Cryptographically Bound Merkle Nodes</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m4:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Vault Storage Volume</div>
             <div class="metric-value">{storage_stats.get('total_size_mb', 0):.2f} MB</div>
             <div class="metric-sub">Local + Cloud Synchronized</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
     st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 

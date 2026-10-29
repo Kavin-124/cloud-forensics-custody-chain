@@ -409,6 +409,34 @@ def apply_pristine_light_theme():
         border-bottom: 1px solid #F1F5F9 !important;
         padding: 9px 14px !important;
     }
+
+    /* 17. NATIVE STREAMLIT BORDERED CONTAINERS & METRIC CARDS */
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 12px !important;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05), 0 1px 2px rgba(15, 23, 42, 0.03) !important;
+        padding: 18px 22px !important;
+        margin-bottom: 16px !important;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"] > div {
+        background-color: transparent !important;
+    }
+    /* Metric tiles inside columns */
+    [data-testid="column"] [data-testid="stVerticalBlockBorderWrapper"] {
+        padding: 14px 18px !important;
+        margin-bottom: 8px !important;
+        min-height: 104px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        transition: all 0.15s ease !important;
+    }
+    [data-testid="column"] [data-testid="stVerticalBlockBorderWrapper"]:hover {
+        border-color: #94A3B8 !important;
+        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08) !important;
+        transform: translateY(-1px) !important;
+    }
     </style>
     """
     if hasattr(st, "html"):

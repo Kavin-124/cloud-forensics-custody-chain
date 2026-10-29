@@ -39,39 +39,35 @@ def render_judge_portal(user: dict):
     # Operational Metrics
     m1, m2, m3, m4 = st.columns(4)
     with m1:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Cases in Trial Review</div>
             <div class="metric-value">{len(set(b['case_id'] for b in chain)) if chain else 0}</div>
             <div class="metric-sub">Active Judicial Dockets</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m2:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Pending Evidentiary Objections</div>
             <div class="metric-value" style="color: {'#DC2626' if pending_disputes else '#059669'};">{len(pending_disputes)}</div>
             <div class="metric-sub">Awaiting Judicial Determination</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m3:
-        integrity_res = verify_chain_integrity()
-        all_ok = integrity_res[0]
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            integrity_res = verify_chain_integrity()
+            all_ok = integrity_res[0]
+            st.markdown(f"""
             <div class="metric-label">Merkle Ledger Integrity</div>
             <div class="metric-value" style="color: {'#059669' if all_ok else '#DC2626'};">{'VALIDATED (Unbroken)' if all_ok else 'ANOMALY DETECTED'}</div>
             <div class="metric-sub">NIST SHA-256 Chaining</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
     with m4:
-        st.markdown(f"""
-        <div class="metric-card">
+        with st.container(border=True):
+            st.markdown(f"""
             <div class="metric-label">Admissibility Mandate</div>
             <div class="metric-value">Section 65B(4)</div>
             <div class="metric-sub">Indian Evidence Act / BSA 2023</div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
     st.markdown("<div style='height: 14px;'></div>", unsafe_allow_html=True)
 
