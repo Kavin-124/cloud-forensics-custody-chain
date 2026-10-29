@@ -37,6 +37,19 @@
                 "purpose": "Self-Healing Protocol: Restored pristine file binary from Cloud Mirror after cryptographic tamper alert",
                 "custody_status": "Integrity 100% Restored",
                 "transfer_hmac": "54aea6efd6f0e312db01d350c610208982973bbb5b8dbfbeda7ac0d57ffa9398"
+            },
+            {
+                "challan_id": "CHL-2024-CYBER-809-T4",
+                "step_no": 4,
+                "timestamp": "2026-10-29 04:51:55 UTC",
+                "from_entity": "Inspector R. Vikram (CB-TN-4091)",
+                "to_entity": "State Forensic Science Laboratory (FSL Chennai)",
+                "purpose": "Forensic Bitstream Clone & Deleted File Recovery",
+                "transferor_pin": "PIN-***876",
+                "recipient_token": "FSL-RECV-KEY-2024",
+                "transferor_hmac": "5b6ff7aa7db9ca96534d6083f2298f49ac6f2c2d98afa88fa47172a8fa52751b",
+                "recipient_hmac": "95e3fce628108664ebd6d2fc88de28cada357fd51aa7f840b625aa45a9072f5a",
+                "custody_status": "In Legal Custody of State Forensic Science Laboratory (FSL Chennai)"
             }
         ],
         "magic_inspection": {

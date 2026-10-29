@@ -252,21 +252,104 @@ def render_police_portal(user: dict):
         else:
             with st.container(border=True):
                 block_options = {f"Exhibit #{b['block_id']}: {b.get('original_filename')} ({b.get('case_id')})": b['block_id'] for b in chain}
-                sel_label = st.selectbox("Select Evidence Artifact to Hand Over:", list(block_options.keys()))
+                sel_label = st.selectbox(
+                    "Select Evidence Artifact to Hand Over:",
+                    list(block_options.keys()),
+                    key="police_handover_sel"
+                )
                 target_block_id = block_options[sel_label]
+                target_block = next((b for b in chain if b["block_id"] == target_block_id), None)
+
+                # Dynamic Exhibit & Case Metadata
+                fir_no = target_block.get('case_id', 'N/A')
+                seizing_officer = target_block.get('officer_name', user.get('full_name'))
+                badge_id = target_block.get('badge_id', user.get('identifier'))
+                seizure_loc = target_block.get('seizure_location', 'N/A')
+                seizure_time = target_block.get('timestamp', 'N/A')
+                case_type = target_block.get('case_type', 'Cyber Crime')
+
+                # Determine current legal custodian from custody trail
+                trail = target_block.get("custody_trail", [])
+                if trail:
+                    current_custodian = trail[-1].get("to_entity", f"{seizing_officer} ({badge_id})")
+                    custody_badge = f"<span style='color: #2563EB; font-weight: 600;'>{current_custodian}</span>"
+                else:
+                    current_custodian = f"{seizing_officer} ({badge_id})"
+                    custody_badge = f"<span style='color: #059669; font-weight: 600;'>Seizing Officer ({seizing_officer})</span>"
+
+                # Dynamic Dossier Display Card
+                st.markdown(f"""
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px 16px; margin: 10px 0 16px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #E2E8F0; padding-bottom: 8px; margin-bottom: 10px;">
+                        <div style="font-size: 13.5px; font-weight: 700; color: #0F172A;">
+                            Case Docket Reference: <span style="color: #2563EB; font-family: 'JetBrains Mono', monospace;">{fir_no}</span>
+                            <span style="color: #64748B; font-weight: 400; margin-left: 8px; font-size: 12.5px;">({case_type})</span>
+                        </div>
+                        <span class="inst-badge police">Exhibit #{target_block_id}</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; font-size: 12.5px;">
+                        <div>
+                            <span style="color: #64748B; font-size: 11px; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 2px;">Original Seizing Officer</span>
+                            <strong style="color: #0F172A;">{seizing_officer}</strong> <code style="font-size: 11px;">{badge_id}</code>
+                        </div>
+                        <div>
+                            <span style="color: #64748B; font-size: 11px; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 2px;">Current Legal Custodian</span>
+                            <div>{custody_badge}</div>
+                        </div>
+                        <div>
+                            <span style="color: #64748B; font-size: 11px; text-transform: uppercase; font-weight: 600; display: block; margin-bottom: 2px;">Crime Scene Location</span>
+                            <span style="color: #0F172A;">{seizure_loc}</span>
+                        </div>
+                    </div>
+                </div>
+                """, unsafe_allow_html=True)
+
+                col_f1, col_f2 = st.columns(2)
+                with col_f1:
+                    st.text_input(
+                        "FIR / Case Docket Reference",
+                        value=fir_no,
+                        disabled=True,
+                        key=f"handover_fir_{target_block_id}",
+                        help="Directly mapped to the selected electronic artifact's FIR record"
+                    )
+                with col_f2:
+                    from_entity = st.text_input(
+                        "Transferor Authority / Releasing Officer",
+                        value=current_custodian,
+                        key=f"from_entity_{target_block_id}",
+                        help="Current authority releasing custody under official protocol"
+                    )
 
                 col_h1, col_h2 = st.columns(2)
                 with col_h1:
-                    from_entity = st.text_input("Transferor Authority / Officer", value=f"{user.get('full_name')} ({user.get('identifier')})")
-                    transferor_pin = st.text_input("Transferor Digital PIN", type="password", value="9876", help="Secret PIN of releasing officer")
+                    to_entity = st.text_input(
+                        "Recipient Agency / Department",
+                        value="State Forensic Science Laboratory (FSL Chennai)",
+                        key=f"to_entity_{target_block_id}"
+                    )
                 with col_h2:
-                    to_entity = st.text_input("Recipient Agency / Department", value="State Forensic Science Laboratory (FSL Chennai)")
-                    purpose = st.selectbox(
-                        "Transfer Purpose",
-                        ["Forensic Bitstream Clone & Deleted File Recovery", "Malware Extraction & Reverse Engineering", "Court Presentation & Evidence Box Deposit"]
+                    transferor_pin = st.text_input(
+                        "Transferor Digital PIN",
+                        type="password",
+                        value="9876",
+                        key=f"transferor_pin_{target_block_id}",
+                        help="Secret PIN of releasing officer to compute dual HMAC signatures"
                     )
 
-                if st.button("Execute Custodial Handover & Issue Challan", type="primary", use_container_width=True):
+                purpose = st.selectbox(
+                    "Transfer Purpose",
+                    [
+                        "Forensic Bitstream Clone & Deleted File Recovery",
+                        "Malware Extraction & Reverse Engineering",
+                        "Court Presentation & Evidence Box Deposit",
+                        "Defense Counsel Discovery Inspection",
+                        "Judicial Sealed Vault Deposit"
+                    ],
+                    key=f"purpose_{target_block_id}"
+                )
+
+                if st.button("Execute Custodial Handover & Issue Challan", type="primary", use_container_width=True, key=f"btn_handover_{target_block_id}"):
                     success, msg, new_step = record_custody_transfer(
                         target_block_id,
                         from_entity=from_entity,
@@ -287,10 +370,17 @@ def render_police_portal(user: dict):
                             data=challan_bytes,
                             file_name=f"Handover_Challan_{new_step['challan_id']}.pdf",
                             mime="application/pdf",
-                            use_container_width=True
+                            use_container_width=True,
+                            key=f"btn_dl_challan_{target_block_id}"
                         )
                     else:
                         st.error(msg)
+
+                # Prior custody chain trail inspection
+                if trail:
+                    with st.expander(f"Prior Custodial Steps for Exhibit #{target_block_id} ({len(trail)} Events)", expanded=False):
+                        for step in trail:
+                            st.markdown(f"- **Step #{step.get('step_no')}** (`{step.get('timestamp')}`): `{step.get('from_entity')}` ➔ `{step.get('to_entity')}` | *{step.get('purpose')}* | Challan: `{step.get('challan_id')}`")
 
     # ---------------- TAB 4: CRIME SCENE GEOLOCATION ----------------
     with pol_tab4:

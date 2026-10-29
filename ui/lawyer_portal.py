@@ -189,31 +189,53 @@ def render_lawyer_portal(user: dict):
         if not chain:
             st.warning("No electronic evidence recorded in ledger.")
         else:
-            block_opts = {f"Exhibit #{b['block_id']}: {b.get('original_filename')} ({b.get('case_id')})": b['block_id'] for b in chain}
-            target_block_sel = st.selectbox("Select Exhibit for Section 65B Certificate:", list(block_opts.keys()))
-            target_b_id = block_opts[target_block_sel]
-            target_block = next(b for b in chain if b["block_id"] == target_b_id)
+            with st.container(border=True):
+                block_opts = {f"Exhibit #{b['block_id']}: {b.get('original_filename')} ({b.get('case_id')})": b['block_id'] for b in chain}
+                target_block_sel = st.selectbox("Select Exhibit for Section 65B Certificate:", list(block_opts.keys()), key="lawyer_cert_sel")
+                target_b_id = block_opts[target_block_sel]
+                target_block = next(b for b in chain if b["block_id"] == target_b_id)
 
-            col_pdf_l, col_pdf_r = st.columns([2, 1])
-            with col_pdf_l:
-                magistrate_name = st.text_input("Designated Court / Bench", value="Hon. Principal Sessions Judge, Cyber Court")
-                court_location = st.text_input("Judicial District", value="City Civil & Sessions Court, Chennai")
-                cert_pdf_bytes = generate_forensic_pdf_bytes(target_block, magistrate_name=magistrate_name, court_location=court_location)
-
-                st.download_button(
-                    label=f"Download Signed Section 65B Certificate (PDF) - Exhibit #{target_b_id}",
-                    data=cert_pdf_bytes,
-                    file_name=f"Section65B_Certificate_Case_{target_block.get('case_id')}_Block_{target_b_id}.pdf",
-                    mime="application/pdf",
-                    use_container_width=True,
-                    type="primary"
-                )
-            with col_pdf_r:
-                st.markdown("""
-                <div style="background: #EEF2FF; padding: 14px; border-radius: 8px; border: 1px solid #C7D2FE; font-size: 12px; color: #312E81; line-height: 1.5;">
-                    <strong>Supreme Court Precedent:</strong> Under <em>Arjun Panditrao Khotkar (2020)</em>, secondary electronic records require contemporaneous Section 65B certification for courtroom admissibility.
+                # Exhibit & Officer Preview
+                st.markdown(f"""
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px; margin: 8px 0 14px 0;">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; font-size: 12.5px;">
+                        <div>
+                            <span style="color: #64748B; font-size: 11px; text-transform: uppercase; font-weight: 600; display: block;">FIR Docket</span>
+                            <strong style="color: #2563EB; font-family: 'JetBrains Mono', monospace;">{target_block.get('case_id')}</strong>
+                        </div>
+                        <div>
+                            <span style="color: #64748B; font-size: 11px; text-transform: uppercase; font-weight: 600; display: block;">Seizing Officer</span>
+                            <strong style="color: #0F172A;">{target_block.get('officer_name')}</strong> <code>{target_block.get('badge_id')}</code>
+                        </div>
+                        <div>
+                            <span style="color: #64748B; font-size: 11px; text-transform: uppercase; font-weight: 600; display: block;">Seizure Timestamp</span>
+                            <span style="color: #0F172A;">{target_block.get('timestamp')}</span>
+                        </div>
+                    </div>
                 </div>
                 """, unsafe_allow_html=True)
+
+                col_pdf_l, col_pdf_r = st.columns([2, 1])
+                with col_pdf_l:
+                    magistrate_name = st.text_input("Designated Court / Bench", value="Hon. Principal Sessions Judge, Cyber Court", key=f"mag_{target_b_id}")
+                    court_location = st.text_input("Judicial District", value="City Civil & Sessions Court, Chennai", key=f"loc_{target_b_id}")
+                    cert_pdf_bytes = generate_forensic_pdf_bytes(target_block, magistrate_name=magistrate_name, court_location=court_location)
+
+                    st.download_button(
+                        label=f"Download Signed Section 65B Certificate (PDF) - Exhibit #{target_b_id}",
+                        data=cert_pdf_bytes,
+                        file_name=f"Section65B_Certificate_Case_{target_block.get('case_id')}_Block_{target_b_id}.pdf",
+                        mime="application/pdf",
+                        use_container_width=True,
+                        type="primary",
+                        key=f"btn_cert_{target_b_id}"
+                    )
+                with col_pdf_r:
+                    st.markdown("""
+                    <div style="background: #EEF2FF; padding: 14px; border-radius: 8px; border: 1px solid #C7D2FE; font-size: 12px; color: #312E81; line-height: 1.5;">
+                        <strong>Supreme Court Precedent:</strong> Under <em>Arjun Panditrao Khotkar (2020)</em>, secondary electronic records require contemporaneous Section 65B certification for courtroom admissibility.
+                    </div>
+                    """, unsafe_allow_html=True)
 
     # ---------------- TAB 4: LODGE DISPUTE ----------------
     with law_tab4:

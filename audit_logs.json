@@ -16,5 +16,14 @@
         "action": "JUDICIAL_RULING",
         "details": "Issued ruling 'OBJECTION_OVERRULED' on DSP-2026-101",
         "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0003",
+        "timestamp": "2026-10-29 04:51:55 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "CUSTODY_HANDOVER",
+        "details": "Transferred Block #1 to State Forensic Science Laboratory (FSL Chennai)",
+        "status": "SUCCESS"
     }
 ]
