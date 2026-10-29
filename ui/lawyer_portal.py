@@ -220,14 +220,25 @@ def render_lawyer_portal(user: dict):
                 </div>
                 """, unsafe_allow_html=True)
 
+                is_target_tampered, curr_hash = check_block_tampered(target_block)
+                if is_target_tampered:
+                    st.error(f"""
+                    🚨 **CRITICAL ADMISSIBILITY BREACH: BITSTREAM MUTATION DETECTED ON EXHIBIT #{target_b_id}!**  
+                    - **Genesis Seizure SHA-256:** `{target_block.get('evidence_hash')}`  
+                    - **Current Physical Disk SHA-256:** `{curr_hash}`  
+                    - **Admissibility Determination:** **INADMISSIBLE UNDER BSA 2023 §63 / IEA §65B**  
+                    - *The Certificate generated below will be rendered as an official FORENSIC BREACH & TAMPER REPORT.*
+                    """)
+
                 col_pdf_l, col_pdf_r = st.columns([2, 1])
                 with col_pdf_l:
                     magistrate_name = st.text_input("Designated Court / Bench", value="Hon. Principal Sessions Judge, Cyber Court", key=f"mag_{target_b_id}")
                     court_location = st.text_input("Judicial District", value="City Civil & Sessions Court, Chennai", key=f"loc_{target_b_id}")
                     cert_pdf_bytes = generate_forensic_pdf_bytes(target_block, magistrate_name=magistrate_name, court_location=court_location)
 
+                    btn_lbl = f"🚨 Download Section 65B Inadmissibility Certificate (PDF) - Exhibit #{target_b_id}" if is_target_tampered else f"Download Signed Section 65B Certificate (PDF) - Exhibit #{target_b_id}"
                     st.download_button(
-                        label=f"Download Signed Section 65B Certificate (PDF) - Exhibit #{target_b_id}",
+                        label=btn_lbl,
                         data=cert_pdf_bytes,
                         file_name=f"Section65B_Certificate_Case_{target_block.get('case_id')}_Block_{target_b_id}.pdf",
                         mime="application/pdf",

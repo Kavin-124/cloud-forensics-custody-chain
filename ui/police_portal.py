@@ -349,6 +349,16 @@ def render_police_portal(user: dict):
                 </div>
                 """, unsafe_allow_html=True)
 
+                is_target_tampered, curr_hash = check_block_tampered(target_block)
+                if is_target_tampered:
+                    st.error(f"""
+                    🚨 **CRITICAL INTEGRITY BREACH: BITSTREAM TAMPERING DETECTED ON EXHIBIT #{target_block_id}!**  
+                    - **Genesis Hash (Seizure):** `{target_block.get('evidence_hash')}`  
+                    - **Live Disk Hash (Current):** `{curr_hash}`  
+                    - **Legal Status:** **FLAGGED: COMPROMISED (INADMISSIBLE BSA 2023 §63 / IEA §65B)**  
+                    *Any Handover Challan issued for this exhibit will embed a statutory Tamper Alert Banner and print the live corrupted hash.*
+                    """)
+
                 col_f1, col_f2 = st.columns(2)
                 with col_f1:
                     st.text_input(
@@ -423,9 +433,21 @@ def render_police_portal(user: dict):
 
                 # Prior custody chain trail inspection
                 if trail:
-                    with st.expander(f"Prior Custodial Steps for Exhibit #{target_block_id} ({len(trail)} Events)", expanded=False):
-                        for step in trail:
-                            st.markdown(f"- **Step #{step.get('step_no')}** (`{step.get('timestamp')}`): `{step.get('from_entity')}` ➔ `{step.get('to_entity')}` | *{step.get('purpose')}* | Challan: `{step.get('challan_id')}`")
+                    with st.expander(f"Prior Custodial Steps for Exhibit #{target_block_id} ({len(trail)} Events)", expanded=True if is_target_tampered else False):
+                        for step in reversed(trail):
+                            col_s1, col_s2 = st.columns([3, 1])
+                            with col_s1:
+                                st.markdown(f"**Step #{step.get('step_no')}** (`{step.get('timestamp')}`): `{step.get('from_entity')}` ➔ `{step.get('to_entity')}` | *{step.get('purpose')}* | Challan: `{step.get('challan_id')}`")
+                            with col_s2:
+                                past_pdf = generate_handover_challan_pdf(target_block, step)
+                                st.download_button(
+                                    label=f"📄 Download Challan #{step.get('step_no')}",
+                                    data=past_pdf,
+                                    file_name=f"Handover_Challan_{step.get('challan_id')}.pdf",
+                                    mime="application/pdf",
+                                    key=f"dl_past_chl_{target_block_id}_{step.get('step_no')}",
+                                    use_container_width=True
+                                )
 
     # ---------------- TAB 4: CRIME SCENE GEOLOCATION ----------------
     with pol_tab4:
