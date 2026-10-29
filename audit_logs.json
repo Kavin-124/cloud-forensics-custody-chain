@@ -106,5 +106,59 @@
         "action": "EVIDENCE_SEIZURE",
         "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #6)",
         "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0013",
+        "timestamp": "2026-10-29 06:04:28 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "EVIDENCE_SEIZURE",
+        "details": "Seized 'lv_0_20260811235747.mp4' for FIR-2026-CYBER-101 (Block #5)",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0014",
+        "timestamp": "2026-10-29 06:05:02 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "CUSTODY_HANDOVER",
+        "details": "Transferred Block #4 to State Forensic Science Laboratory (FSL Chennai)",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0015",
+        "timestamp": "2026-10-29 09:50:54 UTC",
+        "actor": "Chief Forensic Registrar",
+        "role": "ADMIN",
+        "action": "SIMULATE_TAMPER",
+        "details": "Artificially modified Block #2 for demonstration",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0016",
+        "timestamp": "2026-10-29 09:50:58 UTC",
+        "actor": "Chief Forensic Registrar",
+        "role": "ADMIN",
+        "action": "SIMULATE_TAMPER",
+        "details": "Artificially modified Block #2 for demonstration",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0017",
+        "timestamp": "2026-10-29 09:51:05 UTC",
+        "actor": "Chief Forensic Registrar",
+        "role": "ADMIN",
+        "action": "SIMULATE_TAMPER",
+        "details": "Artificially modified Block #2 for demonstration",
+        "status": "SUCCESS"
+    },
+    {
+        "log_id": "LOG-0018",
+        "timestamp": "2026-10-29 09:51:48 UTC",
+        "actor": "Inspector R. Vikram",
+        "role": "POLICE",
+        "action": "CUSTODY_HANDOVER",
+        "details": "Transferred Block #2 to State Forensic Science Laboratory (FSL Chennai)",
+        "status": "SUCCESS"
     }
 ]

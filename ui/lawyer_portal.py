@@ -98,12 +98,17 @@ def render_lawyer_portal(user: dict):
 
             filtered = chain if sel_case == "ALL CASES" else [b for b in chain if b["case_id"] == sel_case]
 
+            # Check for tamper alert
+            any_tampered = any(check_block_tampered(b)[0] for b in chain)
+            if any_tampered:
+                st.error("🚨 **DEFENSE DISCOVERY ALERT: Bitstream Tampering Detected on Prosecution Exhibits!** The on-disk artifact does not match the immutable genesis hash. Strong statutory grounds exist to file an Objection under BSA 2023 §63 / IEA §65B in Tab 4.")
+
             for b in filtered:
                 is_tampered, current_hash = check_block_tampered(b)
-                status_label = "[TAMPER DETECTED]" if is_tampered else "[PRISTINE BITSTREAM]"
+                status_label = "🚨 [TAMPER DETECTED]" if is_tampered else "[PRISTINE BITSTREAM]"
                 expander_title = f"{status_label} Exhibit #{b['block_id']}: {b.get('original_filename')} — Case: {b.get('case_id')}"
                 
-                with st.expander(expander_title, expanded=False):
+                with st.expander(expander_title, expanded=is_tampered):
                     c1, c2 = st.columns([1.5, 1.5])
                     with c1:
                         st.markdown(f"**Case Docket Reference:** `{b.get('case_id')}` ({b.get('case_type', 'Cyber Crime')})")

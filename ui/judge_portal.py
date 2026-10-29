@@ -161,19 +161,39 @@ def render_judge_portal(user: dict):
         </div>
         """, unsafe_allow_html=True)
 
-        if st.button("Execute Cryptographic Ledger Audit", type="primary", use_container_width=True):
-            with st.spinner("Traversing Merkle hash chain and recomputing disk bitstream hashes..."):
-                integrity_res = verify_chain_integrity()
-                all_ok = integrity_res[0]
-                results = integrity_res[-1]
-                total_blocks = len(results)
-                if all_ok:
-                    st.success(f"Audit Complete: All {total_blocks} exhibits are mathematically verified, pristine, and uncompromised.")
-                else:
-                    st.error("Integrity Anomaly Detected: One or more on-disk artifacts have been modified post-seizure.")
+        integrity_res = verify_chain_integrity()
+        all_ok = integrity_res[0]
+        results = integrity_res[-1]
+        total_blocks = len(results)
 
-                for r in results:
-                    st.write(f"- Block #{r['block_id']}: {r['filename']} — **{r['status']}** (SHA-256 verification)")
+        if not all_ok:
+            st.error(f"""
+            🚨 **CRITICAL JUDICIAL ADMISSIBILITY ALERT: MERKLE TREE CONTINUITY BROKEN!**  
+            Cryptographic audit detected post-seizure bitstream alteration. Contaminated exhibits **CANNOT BE ADMITTED** under Section 63 of BSA 2023 / Section 65B of IEA.
+            """)
+        else:
+            st.success(f"✓ **Judicial Ledger Verified:** All {total_blocks} exhibits are mathematically validated, continuous, and tamper-free.")
+
+        st.markdown("##### Exhibit-by-Exhibit Bitstream Verification Breakdown:")
+        for r in results:
+            with st.container(border=True):
+                c_aud1, c_aud2, c_aud3 = st.columns([2, 3, 1.2])
+                with c_aud1:
+                    st.markdown(f"**Exhibit #{r['block_id']}:** `{r['filename']}`")
+                with c_aud2:
+                    st.markdown(f"Genesis: `{r['expected_hash'][:28]}...`")
+                    if r['status'] == "TAMPERED":
+                        st.markdown(f"Live Disk: <code style='color: #DC2626; font-weight: 700;'>{r['actual_hash'][:28]}... (CORRUPTED)</code>", unsafe_allow_html=True)
+                    else:
+                        st.markdown(f"Live Disk: <code style='color: #059669;'>{r['actual_hash'][:28]}... (MATCH)</code>", unsafe_allow_html=True)
+                with c_aud3:
+                    if r['status'] == "TAMPERED":
+                        st.markdown("<span style='font-size: 11px; font-weight: 700; color: #DC2626; background: #FEF2F2; padding: 4px 8px; border-radius: 4px; border: 1px solid #FECACA; display: inline-block;'>🚨 TAMPERED</span>", unsafe_allow_html=True)
+                    else:
+                        st.markdown("<span style='font-size: 11px; font-weight: 700; color: #059669; background: #ECFDF5; padding: 4px 8px; border-radius: 4px; border: 1px solid #A7F3D0; display: inline-block;'>✓ VALID</span>", unsafe_allow_html=True)
+
+        if st.button("Re-Traverse Merkle Hash Chain", use_container_width=True):
+            st.rerun()
 
     # ---------------- TAB 3: QR VERIFICATION & PUBLIC PORTAL ----------------
     with jdg_tab3:

@@ -11,7 +11,7 @@ from crypto_chain import (
     CLOUD_VAULT_DIR,
     auto_heal_evidence
 )
-from pdf_generator import generate_handover_challan_pdf
+from pdf_generator import generate_handover_challan_pdf, check_block_tampered
 from backend.audit_service import log_event
 
 def render_police_portal(user: dict):
@@ -223,8 +223,35 @@ def render_police_portal(user: dict):
         if not chain:
             st.info("No electronic artifacts recorded in ledger. Ingest evidence in Tab 1.")
         else:
+            # Check for any tampered artifacts on disk
+            any_tampered = any(check_block_tampered(b)[0] for b in chain)
+            if any_tampered:
+                st.error("🚨 **CRITICAL FORENSIC INTEGRITY ALERT: Bitstream Mismatch Detected on Local Storage!** One or more exhibits fail SHA-256 verification against the immutable Merkle chain.")
+
             for b in reversed(chain):
-                with st.expander(f"Exhibit #{b['block_id']}: {b.get('original_filename')} — Case: {b.get('case_id')}", expanded=False):
+                is_tampered, disk_hash = check_block_tampered(b)
+                status_icon = "🚨 [TAMPER DETECTED]" if is_tampered else "✓"
+                expander_label = f"{status_icon} Exhibit #{b['block_id']}: {b.get('original_filename')} — Case: {b.get('case_id')}"
+                
+                with st.expander(expander_label, expanded=is_tampered):
+                    if is_tampered:
+                        st.error(f"""
+                        **CRITICAL INTEGRITY BREACH:** The physical file on disk has been modified post-seizure!
+                        - **Genesis Seizure SHA-256:** `{b.get('evidence_hash')}`
+                        - **Current Disk Recomputed SHA-256:** `{disk_hash}`
+                        - **Legal Status:** INADMISSIBLE UNDER BSA 2023 §63 / IEA §65B
+                        """)
+                        col_heal_l, col_heal_r = st.columns([2, 1])
+                        with col_heal_l:
+                            st.info("The synchronized pristine replica in `cloud_vault/` is intact and can restore bitstream integrity.")
+                        with col_heal_r:
+                            if st.button(f"Self-Heal from Cloud Mirror ➔", key=f"heal_pol_{b['block_id']}", type="primary", use_container_width=True):
+                                ok, msg = auto_heal_evidence(b["block_id"])
+                                if ok:
+                                    log_event(user.get("full_name"), "POLICE", "AUTO_HEAL", f"Restored Block #{b['block_id']} from Cloud Mirror")
+                                    st.toast(f"Exhibit #{b['block_id']} successfully restored!", icon="✅")
+                                    st.rerun()
+
                     c1, c2, c3 = st.columns([1.5, 1.5, 1])
                     with c1:
                         st.markdown(f"**Artifact Name:** `{b.get('original_filename')}`")
@@ -233,17 +260,19 @@ def render_police_portal(user: dict):
                         st.markdown(f"**Seizure Location:** {b.get('seizure_location')}")
                     with c2:
                         st.markdown(f"**Timestamp (UTC):** `{b.get('timestamp')}`")
-                        st.markdown(f"**NIST SHA-256 Hash:**")
+                        st.markdown(f"**NIST SHA-256 Genesis Hash:**")
                         st.code(b.get("evidence_hash"), language=None)
                         st.markdown(f"**HMAC Signature:**")
                         st.code(b.get("hmac_sig", "N/A"), language=None)
                     with c3:
                         st.markdown("**Storage Redundancy:**")
                         file_path = os.path.join(VAULT_DIR, b.get("stored_filename", ""))
-                        if os.path.exists(file_path):
-                            st.markdown("<span style='font-size: 11px; font-weight: 600; color: #059669; background: #ECFDF5; padding: 3px 8px; border-radius: 4px; border: 1px solid #A7F3D0;'>ON-PREM VAULT OK</span>", unsafe_allow_html=True)
-                        else:
+                        if not os.path.exists(file_path):
                             st.markdown("<span style='font-size: 11px; font-weight: 600; color: #DC2626; background: #FEF2F2; padding: 3px 8px; border-radius: 4px; border: 1px solid #FECACA;'>LOCAL MISSING</span>", unsafe_allow_html=True)
+                        elif is_tampered:
+                            st.markdown("<span style='font-size: 11px; font-weight: 700; color: #DC2626; background: #FEF2F2; padding: 3px 8px; border-radius: 4px; border: 1px solid #FECACA; display: inline-block;'>🚨 TAMPERED</span>", unsafe_allow_html=True)
+                        else:
+                            st.markdown("<span style='font-size: 11px; font-weight: 600; color: #059669; background: #ECFDF5; padding: 3px 8px; border-radius: 4px; border: 1px solid #A7F3D0;'>ON-PREM VAULT OK</span>", unsafe_allow_html=True)
 
                         cloud_path = os.path.join(CLOUD_VAULT_DIR, b.get("stored_filename", ""))
                         if os.path.exists(cloud_path):

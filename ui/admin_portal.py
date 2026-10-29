@@ -6,12 +6,14 @@ from crypto_chain import (
     get_ledger,
     simulate_tampering,
     auto_heal_all_tampered,
+    auto_heal_evidence,
     get_storage_stats,
     reset_all_evidence,
     verify_chain_integrity,
     VAULT_DIR,
     CLOUD_VAULT_DIR
 )
+from pdf_generator import check_block_tampered
 
 def render_admin_portal(user: dict):
     # Enterprise Command Header
@@ -167,39 +169,82 @@ def render_admin_portal(user: dict):
         if not chain:
             st.warning("No evidence in ledger to simulate tampering.")
         else:
+            # Check for any tampered blocks across ledger
+            tampered_blocks = [b for b in chain if check_block_tampered(b)[0]]
+            if tampered_blocks:
+                st.error(f"""
+                🚨 **CRITICAL FORENSIC INTEGRITY ALERT: {len(tampered_blocks)} Artifact(s) Compromised on Local Disk!**  
+                Unauthorized bitstream mutation detected! Disk hashes deviate from immutable genesis fingerprints.
+                Click **"Execute Cloud Autonomous Self-Healing"** or use individual restore buttons below to repair.
+                """)
+
             col_t1, col_t2 = st.columns(2)
 
             with col_t1:
-                st.markdown("##### Adversarial Tamper Injection")
-                target_block = st.selectbox(
-                    "Select Evidence Artifact to Mutate:",
-                    [f"Block #{b['block_id']}: {b.get('original_filename')} ({b.get('case_id')})" for b in chain]
-                )
-                b_id = int(target_block.split("#")[1].split(":")[0])
+                with st.container(border=True):
+                    st.markdown("##### 🔴 Adversarial Tamper Injection")
+                    st.markdown("<p style='font-size: 12px; color: #64748B;'>Select an exhibit to inject malicious payload bytes into its local vault binary.</p>", unsafe_allow_html=True)
+                    target_block = st.selectbox(
+                        "Select Evidence Artifact to Mutate:",
+                        [f"Block #{b['block_id']}: {b.get('original_filename')} ({b.get('case_id')})" for b in chain],
+                        key="admin_tamper_select"
+                    )
+                    b_id = int(target_block.split("#")[1].split(":")[0])
 
-                if st.button("Inject Unauthorized Modification (Corrupt Bitstream)", type="primary", use_container_width=True):
-                    tamper_ok, msg = simulate_tampering(b_id)
-                    if tamper_ok:
-                        log_event(user.get("full_name"), "ADMIN", "SIMULATE_TAMPER", f"Artificially modified Block #{b_id} for demonstration")
-                        st.error(f"Tamper Event Injected: {msg}")
-                        st.rerun()
-                    else:
-                        st.warning(msg)
+                    if st.button("Inject Unauthorized Modification (Corrupt Bitstream)", type="primary", use_container_width=True, key="btn_inject_tamper"):
+                        tamper_ok, msg = simulate_tampering(b_id)
+                        if tamper_ok:
+                            log_event(user.get("full_name"), "ADMIN", "SIMULATE_TAMPER", f"Artificially modified Block #{b_id} for demonstration")
+                            st.toast(f"Tampered Block #{b_id} successfully!", icon="🚨")
+                            st.error(f"🚨 **Tamper Injected Successfully:** Modified Block #{b_id}. Its local disk hash will now mismatch the genesis hash!")
+                            st.rerun()
+                        else:
+                            st.warning(msg)
 
             with col_t2:
-                st.markdown("##### Autonomous Cloud Disaster Recovery")
-                st.markdown("""
-                Upon anomaly detection, the Disaster Recovery Engine queries the synchronized pristine replica in `cloud_vault/` 
-                and restores the corrupted bitstream in under 1 millisecond.
-                """)
-                if st.button("Execute Cloud Autonomous Self-Healing", use_container_width=True):
-                    healed_count, results = auto_heal_all_tampered()
-                    log_event(user.get("full_name"), "ADMIN", "AUTO_HEAL", f"Triggered autonomous restore for {healed_count} items")
-                    if healed_count > 0:
-                        st.success(f"Disaster Recovery Complete: Successfully restored {healed_count} corrupted exhibits from cloud mirror.")
-                    else:
-                        st.info("All on-disk exhibits are currently pristine and in 100% cryptographic agreement.")
-                    st.rerun()
+                with st.container(border=True):
+                    st.markdown("##### 🟢 Autonomous Cloud Disaster Recovery")
+                    st.markdown("""
+                    <p style='font-size: 12px; color: #64748B;'>
+                    Queries synchronized pristine replica in <code>cloud_vault/</code> and restores corrupted bitstreams in under 1 millisecond.
+                    </p>
+                    """, unsafe_allow_html=True)
+                    if st.button("Execute Cloud Autonomous Self-Healing", use_container_width=True, key="btn_heal_all"):
+                        healed_count, results = auto_heal_all_tampered()
+                        log_event(user.get("full_name"), "ADMIN", "AUTO_HEAL", f"Triggered autonomous restore for {healed_count} items")
+                        if healed_count > 0:
+                            st.toast(f"Restored {healed_count} artifacts!", icon="✅")
+                            st.success(f"✓ **Disaster Recovery Complete:** Successfully restored {healed_count} corrupted exhibit(s) from cloud mirror.")
+                            st.rerun()
+                        else:
+                            st.info("✓ All on-disk exhibits are currently pristine and in 100% cryptographic agreement.")
+
+            st.markdown("---")
+            st.markdown("##### 🛡️ Live Evidence Vault Integrity Monitor")
+
+            for b in chain:
+                is_tampered, disk_hash = check_block_tampered(b)
+                with st.container(border=True):
+                    col_b1, col_b2, col_b3 = st.columns([2, 2.5, 1.2])
+                    with col_b1:
+                        st.markdown(f"**Exhibit #{b['block_id']}:** `{b.get('original_filename')}`")
+                        st.markdown(f"Case: **{b.get('case_id')}** | Officer: {b.get('officer_name')}")
+                    with col_b2:
+                        st.markdown(f"Genesis SHA-256: `{b.get('evidence_hash')[:24]}...`")
+                        if is_tampered:
+                            st.markdown(f"Live Disk SHA-256: <code style='color: #DC2626; font-weight: 700;'>{disk_hash[:24]}... (MISMATCH)</code>", unsafe_allow_html=True)
+                        else:
+                            st.markdown(f"Live Disk SHA-256: <code style='color: #059669;'>{disk_hash[:24]}... (MATCH)</code>", unsafe_allow_html=True)
+                    with col_b3:
+                        if is_tampered:
+                            st.markdown("<span style='font-size: 11px; font-weight: 700; color: #DC2626; background: #FEF2F2; padding: 4px 8px; border-radius: 4px; border: 1px solid #FECACA; display: inline-block;'>🚨 TAMPERED</span>", unsafe_allow_html=True)
+                            if st.button("Auto-Heal ➔", key=f"heal_single_{b['block_id']}", use_container_width=True):
+                                ok, h_msg = auto_heal_evidence(b["block_id"])
+                                if ok:
+                                    st.toast(f"Healed Block #{b['block_id']}!", icon="✅")
+                                    st.rerun()
+                        else:
+                            st.markdown("<span style='font-size: 11px; font-weight: 700; color: #059669; background: #ECFDF5; padding: 4px 8px; border-radius: 4px; border: 1px solid #A7F3D0; display: inline-block;'>✓ PRISTINE</span>", unsafe_allow_html=True)
 
     # ---------------- TAB 4: RESET DATA ----------------
     with adm_tab4:
