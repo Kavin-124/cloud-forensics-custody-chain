@@ -255,6 +255,8 @@ def generate_forensic_pdf_bytes(
 
 def generate_handover_challan_pdf(block_data: dict, event: dict, output_path: str = None) -> bytes:
     """Generates an official Inter-Agency Custody Handover Challan & Receipt PDF."""
+    is_tampered, current_disk_hash = check_block_tampered(block_data)
+    
     pdf = FPDF()
     pdf.add_page()
     pdf.set_auto_page_break(auto=True, margin=15)
@@ -268,7 +270,16 @@ def generate_handover_challan_pdf(block_data: dict, event: dict, output_path: st
     
     pdf.ln(3)
     pdf.line(10, pdf.get_y(), 200, pdf.get_y())
-    pdf.ln(6)
+    pdf.ln(4)
+
+    # Tamper Alert Banner if compromised
+    if is_tampered:
+        pdf.set_fill_color(254, 226, 226)
+        pdf.set_text_color(185, 28, 28)
+        pdf.set_font("Helvetica", "B", 10.5)
+        pdf.cell(0, 8, " CRITICAL ALERT: PRE-HANDOVER BITSTREAM TAMPERING DETECTED! ", border=1, fill=True, new_x="LMARGIN", new_y="NEXT", align="C")
+        pdf.ln(3)
+        pdf.set_text_color(15, 23, 42)
     
     # Challan Reference Banner
     challan_id = event.get("challan_id", f"CHL-{block_data.get('case_id')}-TX")
@@ -294,9 +305,17 @@ def generate_handover_challan_pdf(block_data: dict, event: dict, output_path: st
     pdf.cell(col_w1, 5.5, "Immutable Merkle Block:", border=0)
     pdf.cell(col_w2, 5.5, f"Block #{block_data.get('block_id')}", new_x="LMARGIN", new_y="NEXT")
     
-    pdf.cell(col_w1, 5.5, "Evidence SHA-256 Hash:", border=0)
+    pdf.cell(col_w1, 5.5, "Genesis SHA-256 Hash:", border=0)
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(col_w2, 5.5, f"{block_data.get('evidence_hash')}", new_x="LMARGIN", new_y="NEXT")
+
+    if is_tampered:
+        pdf.set_font("Helvetica", "B", 9)
+        pdf.set_text_color(185, 28, 28)
+        pdf.cell(col_w1, 5.5, "Live Recomputed Hash:", border=0)
+        pdf.set_font("Helvetica", "B", 8)
+        pdf.cell(col_w2, 5.5, f"{current_disk_hash} [FAILED: DISK MUTATED]", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_text_color(15, 23, 42)
     pdf.ln(3)
     
     # 2. Transmission & Handover Event
@@ -322,8 +341,12 @@ def generate_handover_challan_pdf(block_data: dict, event: dict, output_path: st
     
     pdf.cell(col_w1, 5.5, "Custodial Legal Status:", border=0)
     pdf.set_font("Helvetica", "B", 9)
-    pdf.set_text_color(0, 100, 0)
-    pdf.cell(col_w2, 5.5, f"{event.get('custody_status', 'In Custody')}", new_x="LMARGIN", new_y="NEXT")
+    if is_tampered:
+        pdf.set_text_color(185, 28, 28)
+        pdf.cell(col_w2, 5.5, "FLAGGED: COMPROMISED (INADMISSIBLE BSA 2023 §63)", new_x="LMARGIN", new_y="NEXT")
+    else:
+        pdf.set_text_color(0, 100, 0)
+        pdf.cell(col_w2, 5.5, f"{event.get('custody_status', 'In Custody')}", new_x="LMARGIN", new_y="NEXT")
     pdf.set_text_color(0, 0, 0)
     pdf.ln(3)
     
@@ -343,11 +366,18 @@ def generate_handover_challan_pdf(block_data: dict, event: dict, output_path: st
     pdf.set_font("Helvetica", "B", 9.5)
     pdf.cell(0, 5, "4. STATUTORY ADMISSIBILITY DECLARATION (SECTION 65B)", new_x="LMARGIN", new_y="NEXT")
     pdf.set_font("Helvetica", "", 8.5)
-    declaration = (
-        "This Inter-Agency Handover Challan constitutes conclusive electronic documentation of custody transfer. "
-        "The cryptographic hash of the underlying artifact was recalculated and mutually attested by both parties "
-        "prior to physical and logical transmission. Strict chain of custody continuity has been preserved without interruption."
-    )
+    if is_tampered:
+        declaration = (
+            "CRITICAL WARNING: Physical bitstream modification detected prior to transfer. "
+            "The live recomputed SHA-256 hash fails genesis verification against the immutable Merkle chain. "
+            "This exhibit is legally FLAGGED AS COMPROMISED and inadmissible in courtroom trial under Section 63 BSA 2023 / Section 65B IEA."
+        )
+    else:
+        declaration = (
+            "This Inter-Agency Handover Challan constitutes conclusive electronic documentation of custody transfer. "
+            "The cryptographic hash of the underlying artifact was recalculated and mutually attested by both parties "
+            "prior to physical and logical transmission. Strict chain of custody continuity has been preserved without interruption."
+        )
     pdf.multi_cell(0, 4.5, declaration)
     pdf.ln(4)
     
